@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カレンダー日記</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📅 カレンダー日記</h1>
+        </header>
+
+        <div class="quote-section">
+            <div class="quote-icon">💭</div>
+            <p id="dailyQuote" class="quote-text"></p>
+            <p id="quoteAuthor" class="quote-author"></p>
+        </div>
+
+        <div class="calendar-section">
+            <div class="calendar-header">
+                <button id="prevMonth" class="nav-btn">← 前月</button>
+                <h2 id="currentMonth"></h2>
+                <button id="nextMonth" class="nav-btn">次月 →</button>
+            </div>
+
+            <div class="weekdays">
+                <div>日</div>
+                <div>月</div>
+                <div>火</div>
+                <div>水</div>
+                <div>木</div>
+                <div>金</div>
+                <div>土</div>
+            </div>
+
+            <div id="calendarGrid" class="calendar-grid"></div>
+        </div>
+
+        <div class="diary-section">
+            <h3 id="diaryDateTitle">日付を選択してください</h3>
+            <textarea id="diaryText" placeholder="今日の日記を書いてください..." disabled></textarea>
+            <div class="diary-buttons">
+                <button id="saveBtn" class="btn btn-primary" disabled>保存</button>
+                <button id="deleteBtn" class="btn btn-secondary" disabled>削除</button>
+            </div>
+            <div id="saveStatus" class="save-status"></div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
