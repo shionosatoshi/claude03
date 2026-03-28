@@ -9,7 +9,7 @@ class CalendarApp {
         this.initializeElements();
         this.attachEventListeners();
         this.renderCalendar();
-        this.displayDailyQuote();
+        this.displayQuoteForDate(new Date());
     }
 
     initializeElements() {
@@ -145,6 +145,9 @@ class CalendarApp {
         this.saveBtn.disabled = false;
         this.deleteBtn.disabled = !this.diaryData[dateStr];
 
+        // 選択した日付の名言を表示
+        this.displayQuoteForDate(new Date(year, month - 1, day));
+
         // ステータスをクリア
         this.saveStatus.textContent = '';
         this.saveStatus.className = 'save-status';
@@ -208,11 +211,10 @@ class CalendarApp {
         return `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
     }
 
-    // 今日の名言を表示
-    displayDailyQuote() {
+    // 指定した日付の名言を表示
+    displayQuoteForDate(date) {
         const quotes = this.getQuotes();
-        const today = new Date();
-        const dayOfYear = this.getDayOfYear(today);
+        const dayOfYear = this.getDayOfYear(date);
         const quoteIndex = dayOfYear % quotes.length;
 
         const quote = quotes[quoteIndex];
@@ -220,12 +222,12 @@ class CalendarApp {
         this.quoteAuthor.textContent = quote.author;
     }
 
-    // 年間での通算日を取得（1月1日を1とする）
+    // 年間での通算日を取得（1月1日を0とする）
     getDayOfYear(date) {
         const start = new Date(date.getFullYear(), 0, 1);
-        const diff = date - start;
+        const diff = date.getTime() - start.getTime();
         const oneDay = 1000 * 60 * 60 * 24;
-        return Math.floor(diff / oneDay) + 1;
+        return Math.floor(diff / oneDay);
     }
 
     // 名言データ
