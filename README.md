@@ -74,3 +74,8 @@ Claude Code アプリケーション
 ### 📖 詳しいデプロイ手順
 
 [DEPLOY_GUIDE.md](DEPLOY_GUIDE.md) を参照してください。
+
+### 🔧 トラブルシューティング
+
+もしアプリが動作しない場合は、[TROUBLESHOOTING.md](TROUBLESHOOTING.md) を参照してください。
+
