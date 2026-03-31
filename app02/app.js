@@ -44,6 +44,18 @@ class RpgTodoApp {
         this.todoList = document.getElementById('todoList');
         this.emptyState = document.getElementById('emptyState');
         this.inputStatus = document.getElementById('inputStatus');
+
+        // 要素が正しく取得できたか確認
+        if (!this.bossEmoji || !this.hpFill || !this.hpText || !this.todoInput || !this.addBtn) {
+            console.error('要素の取得に失敗しました:', {
+                bossEmoji: !!this.bossEmoji,
+                hpFill: !!this.hpFill,
+                hpText: !!this.hpText,
+                todoInput: !!this.todoInput,
+                addBtn: !!this.addBtn
+            });
+            throw new Error('必要なHTML要素が見つかりません。HTMLが正しく読み込まれているか確認してください。');
+        }
     }
 
     attachEventListeners() {
