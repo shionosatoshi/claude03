@@ -8,7 +8,6 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="RPG ToDo">
     <link rel="manifest" href="manifest.json">
-    <link rel="apple-touch-icon" href="icon-192.png">
     <title>RPG ToDo - ボスを倒そう！</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -75,8 +74,8 @@
 
     <script src="app.js"></script>
     <script>
-        // Service Workerの登録
-        if ('serviceWorker' in navigator) {
+        // Service Workerの登録（HTTP/HTTPSのみ）
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('./sw.js')
                     .then((registration) => {
