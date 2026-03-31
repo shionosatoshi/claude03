@@ -1,0 +1,118 @@
+# ========================================
+# 個人情報・プライバシー関連
+# ========================================
+
+# Claude Code 設定（個人設定）
+.claude/
+.claude/settings.local.json
+
+# 環境変数・APIキー
+.env
+.env.local
+.env.*.local
+*.env
+secrets.json
+config.json
+api-keys.txt
+
+# ========================================
+# 依存関係（Node.js等）
+# ========================================
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+package-lock.json
+yarn.lock
+
+# ========================================
+# OS固有ファイル
+# ========================================
+# Windows
+Thumbs.db
+ehthumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+*.lnk
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Linux
+*~
+.directory
+
+# ========================================
+# エディタ・IDE
+# ========================================
+# VSCode
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json.example
+
+# JetBrains IDEs（IntelliJ, WebStorm等）
+.idea/
+*.iml
+*.iws
+*.ipr
+
+# Vim
+*.swp
+*.swo
+*~
+.*.sw*
+
+# Emacs
+*\~
+\#*\#
+.\#*
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# ========================================
+# ログ・一時ファイル
+# ========================================
+*.log
+logs/
+*.tmp
+*.temp
+temp/
+
+# ========================================
+# バックアップファイル
+# ========================================
+*.bak
+*.backup
+*~
+
+# ========================================
+# テスト・カバレッジ
+# ========================================
+coverage/
+.nyc_output/
+*.test.js.snap
+
+# ========================================
+# ビルド出力
+# ========================================
+dist/
+build/
+out/
+
+# ========================================
+# その他
+# ========================================
+# PWAのアイコンファイル（将来的に追加する場合）
+# *.png
+# *.ico
+# favicon.*
+
+# LocalStorageデータはブラウザ側に保存されるため、Gitには含まれません
+# 以下のファイルで扱われるデータはすべてローカル環境専用です：
+# - app01: 日記データ（diary-YYYY-MM-DD）
+# - app02: ToDoデータ（rpg-todo-ID）、ボス状態（rpg-boss-state）
