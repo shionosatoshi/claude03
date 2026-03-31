@@ -26,9 +26,9 @@ class RpgTodoApp {
         this.swipeThreshold = 80; // スワイプ判定の閾値（ピクセル）
 
         this.loadData();
-        this.checkDailyReset();
-        this.initializeElements();
+        this.initializeElements();    // 先に要素を初期化
         this.attachEventListeners();
+        this.checkDailyReset();       // その後にリセットチェック
         this.render();
         console.log('✅ RpgTodoApp初期化成功');
     }
