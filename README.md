@@ -79,3 +79,8 @@ Claude Code アプリケーション
 
 もしアプリが動作しない場合は、[TROUBLESHOOTING.md](TROUBLESHOOTING.md) を参照してください。
 
+### 🔒 プライバシー
+
+データの取り扱いについては、[PRIVACY.md](PRIVACY.md) を参照してください。
+
+
