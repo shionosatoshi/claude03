@@ -1,5 +1,5 @@
 // Service Worker for RPG ToDo App
-const CACHE_NAME = 'rpg-todo-v1';
+const CACHE_NAME = 'rpg-todo-v2';
 const urlsToCache = [
     './',
     './index.html',
