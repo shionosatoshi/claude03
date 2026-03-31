@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RPG ToDo - ボスを倒そう！</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚔️ RPG ToDo ⚔️</h1>
+            <p class="subtitle">ToDoを完了してボスを倒せ！</p>
+        </header>
+
+        <section class="boss-section">
+            <div class="boss-container">
+                <div class="boss-emoji" id="bossEmoji">👹</div>
+                <div class="boss-name" id="bossName">ボス</div>
+            </div>
+
+            <div class="hp-bar-container">
+                <div class="hp-bar">
+                    <div class="hp-fill" id="hpFill"></div>
+                </div>
+                <div class="hp-text" id="hpText">100/100</div>
+            </div>
+
+            <div class="defeat-message" id="defeatMessage">
+                🎉 ボスを撃破！🎉
+            </div>
+
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-label">今日の進捗</span>
+                    <span class="stat-value" id="todayProgress">0/4</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">撃破数</span>
+                    <span class="stat-value" id="defeatedCount">0</span>
+                </div>
+            </div>
+        </section>
+
+        <section class="input-section">
+            <div class="input-container">
+                <input type="text" id="todoInput" placeholder="新しいToDoを入力..." maxlength="100">
+                <button id="addBtn" class="btn btn-primary">追加</button>
+            </div>
+            <div id="inputStatus" class="input-status"></div>
+        </section>
+
+        <section class="todo-section">
+            <div class="section-header">
+                <h2>📋 ToDoリスト</h2>
+                <button id="resetBtn" class="btn btn-secondary btn-small">🔄 リセット</button>
+            </div>
+            <div id="todoList" class="todo-list">
+                <div class="empty-state" id="emptyState">
+                    <p>📝 ToDoを追加して始めよう！</p>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p class="footer-text">💡 1 ToDo = 25ダメージ | 4 ToDo完了でボス撃破！</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
