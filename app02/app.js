@@ -1,7 +1,9 @@
 // RPG風ToDoリストアプリのメインロジック
+console.log('=== app.js読み込み開始 ===');
 
 class RpgTodoApp {
     constructor() {
+        console.log('=== RpgTodoApp.constructor開始 ===');
         this.todos = [];
         this.bossState = {
             currentBoss: "👹",
@@ -28,6 +30,7 @@ class RpgTodoApp {
         this.initializeElements();
         this.attachEventListeners();
         this.render();
+        console.log('✅ RpgTodoApp初期化成功');
     }
 
     // ===== 初期化 =====
@@ -110,7 +113,10 @@ class RpgTodoApp {
 
     // ===== ToDo操作 =====
     addTodo() {
+        console.log('🔵 addTodoメソッド呼び出し');
         const text = this.todoInput.value.trim();
+        console.log('🔵 入力テキスト:', text);
+
         if (!text) {
             this.showInputStatus('ToDoを入力してください', 'error');
             return;
@@ -128,6 +134,7 @@ class RpgTodoApp {
         this.todoInput.value = '';
         this.showInputStatus('ToDoを追加しました', 'success');
         this.renderTodoList();
+        console.log('✅ ToDo追加成功:', todo);
     }
 
     toggleTodo(id) {
@@ -434,7 +441,15 @@ class RpgTodoApp {
     }
 }
 
+console.log('=== app.js読み込み完了、DOMContentLoaded待機中 ===');
+
 // アプリケーションを初期化
 document.addEventListener('DOMContentLoaded', () => {
-    new RpgTodoApp();
+    console.log('=== DOMContentLoadedイベント発火 ===');
+    try {
+        new RpgTodoApp();
+    } catch (error) {
+        console.error('❌ アプリ初期化エラー:', error);
+        alert('アプリの初期化に失敗しました: ' + error.message);
+    }
 });
