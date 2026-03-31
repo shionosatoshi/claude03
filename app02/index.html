@@ -3,6 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#8b5cf6">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="RPG ToDo">
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
     <title>RPG ToDo - ボスを倒そう！</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -68,5 +74,19 @@
     </div>
 
     <script src="app.js"></script>
+    <script>
+        // Service Workerの登録
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker登録成功:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker登録失敗:', error);
+                    });
+            });
+        }
+    </script>
 </body>
 </html>

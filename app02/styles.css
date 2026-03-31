@@ -27,6 +27,9 @@ body {
     color: var(--text-color);
     line-height: 1.6;
     padding: 20px;
+    /* タッチデバイスでの最適化 */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
 }
 
 .container {
@@ -314,6 +317,9 @@ header h1 {
     align-items: center;
     gap: 12px;
     transition: all 0.3s ease;
+    /* タッチデバイスでのスワイプ対応 */
+    touch-action: pan-y;
+    user-select: none;
 }
 
 .todo-item:hover {
@@ -331,10 +337,12 @@ header h1 {
 }
 
 .todo-checkbox {
-    width: 20px;
-    height: 20px;
+    width: 28px;
+    height: 28px;
     cursor: pointer;
     accent-color: var(--success-color);
+    /* タッチエリアを確保 */
+    flex-shrink: 0;
 }
 
 .todo-text {
@@ -349,12 +357,16 @@ header h1 {
 }
 
 .todo-btn {
-    padding: 6px 12px;
+    padding: 10px 16px;
     border: none;
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: 0.9rem;
+    font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
+    /* タッチエリアを確保 */
+    min-height: 44px;
+    min-width: 44px;
 }
 
 .edit-btn {
@@ -389,12 +401,44 @@ footer {
 
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
+    body {
+        padding: 12px;
+    }
+
     header h1 {
         font-size: 2rem;
     }
 
+    .subtitle {
+        font-size: 1rem;
+    }
+
+    .boss-section {
+        padding: 20px;
+    }
+
     .boss-emoji {
         font-size: 4rem;
+    }
+
+    .boss-name {
+        font-size: 1rem;
+    }
+
+    .hp-bar {
+        height: 24px;
+    }
+
+    .hp-text {
+        font-size: 1rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .input-section {
+        padding: 16px;
     }
 
     .input-container {
@@ -403,24 +447,82 @@ footer {
 
     #todoInput {
         width: 100%;
+        font-size: 16px; /* iOSでの自動ズーム防止 */
+        padding: 14px 16px;
     }
 
     .btn {
         width: 100%;
+        padding: 14px 24px;
+        font-size: 1.1rem;
+        min-height: 48px;
     }
 
     .stats {
-        flex-direction: column;
-        gap: 15px;
+        flex-direction: row;
+        gap: 10px;
+        justify-content: space-around;
     }
 
-    .section-header {
-        flex-direction: column;
+    .section-header h2 {
+        font-size: 1.3rem;
+    }
+
+    .todo-section {
+        padding: 16px;
+    }
+
+    .todo-item {
+        padding: 14px 12px;
         gap: 10px;
-        align-items: flex-start;
+    }
+
+    .todo-checkbox {
+        width: 32px;
+        height: 32px;
+    }
+
+    .todo-text {
+        font-size: 1.05rem;
+        flex: 1;
     }
 
     .todo-actions {
-        flex-direction: column;
+        flex-direction: row;
+        gap: 6px;
+    }
+
+    .todo-btn {
+        padding: 10px 12px;
+        font-size: 0.85rem;
+        min-height: 40px;
+    }
+}
+
+/* ===== Touch Device Optimizations ===== */
+@media (hover: none) and (pointer: coarse) {
+    /* ホバー効果を削除 */
+    .todo-item:hover {
+        box-shadow: var(--shadow-sm);
+        transform: none;
+    }
+
+    .btn-primary:hover,
+    .edit-btn:hover,
+    .delete-btn:hover,
+    .btn-secondary:hover {
+        transform: none;
+    }
+
+    /* アクティブ時のフィードバックを追加 */
+    .btn-primary:active,
+    .edit-btn:active {
+        opacity: 0.7;
+        transform: scale(0.98);
+    }
+
+    .delete-btn:active {
+        opacity: 0.7;
+        transform: scale(0.98);
     }
 }

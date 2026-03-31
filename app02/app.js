@@ -16,6 +16,12 @@ class RpgTodoApp {
             todosToDefeat: 4,
             bossEmojis: ["👹", "🐉", "👾", "👻", "🤖", "💀", "🦕", "🦁"]
         };
+        // スワイプ用のプロパティ
+        this.touchStartX = 0;
+        this.touchStartY = 0;
+        this.touchEndX = 0;
+        this.touchEndY = 0;
+        this.swipeThreshold = 80; // スワイプ判定の閾値（ピクセル）
 
         this.loadData();
         this.checkDailyReset();
@@ -47,6 +53,10 @@ class RpgTodoApp {
             if (e.key === 'Enter') this.addTodo();
         });
         this.todoList.addEventListener('click', (e) => this.handleTodoClick(e));
+
+        // スワイプ用のタッチイベント
+        this.todoList.addEventListener('touchstart', (e) => this.handleTouchStart(e), { passive: true });
+        this.todoList.addEventListener('touchend', (e) => this.handleTouchEnd(e), { passive: true });
     }
 
     // ===== データ管理 =====
@@ -164,6 +174,71 @@ class RpgTodoApp {
             this.deleteTodo(id);
         } else if (e.target.classList.contains('edit-btn')) {
             this.editTodo(id);
+        }
+    }
+
+    // ===== スワイプ操作 =====
+    handleTouchStart(e) {
+        const touch = e.changedTouches[0];
+        this.touchStartX = touch.clientX;
+        this.touchStartY = touch.clientY;
+    }
+
+    handleTouchEnd(e) {
+        const touch = e.changedTouches[0];
+        this.touchEndX = touch.clientX;
+        this.touchEndY = touch.clientY;
+
+        this.handleSwipe();
+    }
+
+    handleSwipe() {
+        const deltaX = this.touchEndX - this.touchStartX;
+        const deltaY = this.touchEndY - this.touchStartY;
+
+        // 水平方向のスワイプのみ判定
+        if (Math.abs(deltaX) < Math.abs(deltaY)) return;
+        if (Math.abs(deltaX) < this.swipeThreshold) return;
+
+        // スワイプした要素を取得
+        const element = document.elementFromPoint(this.touchEndX, this.touchEndY);
+        const todoItem = element?.closest('.todo-item');
+        if (!todoItem) return;
+
+        const id = parseInt(todoItem.dataset.id);
+        if (!id) return;
+
+        // 右スワイプで完了、左スワイプで削除
+        if (deltaX > 0) {
+            // 右スワイプ → 完了/未完了切り替え
+            this.toggleTodo(id);
+            this.showSwipeFeedback(todoItem, 'complete');
+        } else {
+            // 左スワイプ → 削除確認
+            const todo = this.todos.find(t => t.id === id);
+            if (todo && confirm('「' + todo.text + '」を削除しますか？')) {
+                this.deleteTodo(id);
+            } else {
+                this.showSwipeFeedback(todoItem, 'cancel');
+            }
+        }
+    }
+
+    showSwipeFeedback(element, action) {
+        const originalTransform = element.style.transform;
+
+        if (action === 'complete') {
+            element.style.backgroundColor = 'var(--success-color)';
+            element.style.color = 'white';
+            setTimeout(() => {
+                element.style.backgroundColor = '';
+                element.style.color = '';
+            }, 300);
+        } else if (action === 'cancel') {
+            element.style.transform = 'translateX(0)';
+            setTimeout(() => {
+                element.style.transform = originalTransform;
+            }, 100);
         }
     }
 
@@ -299,6 +374,9 @@ class RpgTodoApp {
         const div = document.createElement('div');
         div.className = `todo-item${todo.completed ? ' completed' : ''}`;
         div.dataset.id = todo.id;
+
+        // スワイプ操作用のスタイル
+        div.style.transition = 'transform 0.3s ease, background-color 0.3s ease';
 
         div.innerHTML = `
             <input type="checkbox" class="todo-checkbox" ${todo.completed ? 'checked' : ''}>
