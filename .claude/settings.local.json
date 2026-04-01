@@ -4,7 +4,9 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(explorer.exe \"c:\\\\Users\\\\sunfi\\\\OneDrive\\\\デスクトップ\\\\claudeapp\\\\app02\\\\index.html\")"
+      "Bash(explorer.exe \"c:\\\\Users\\\\sunfi\\\\OneDrive\\\\デスクトップ\\\\claudeapp\\\\app02\\\\index.html\")",
+      "Bash(npm --version)",
+      "Bash(npx --yes http-server -p 8080 -o)"
     ]
   }
 }
