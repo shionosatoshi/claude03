@@ -6,7 +6,18 @@
       "Bash(git push:*)",
       "Bash(explorer.exe \"c:\\\\Users\\\\sunfi\\\\OneDrive\\\\デスクトップ\\\\claudeapp\\\\app02\\\\index.html\")",
       "Bash(npm --version)",
-      "Bash(npx --yes http-server -p 8080 -o)"
+      "Bash(npx --yes http-server -p 8080 -o)",
+      "Bash(cp \"/c/Users/sunfi/OneDrive/デスクトップ/antigravitytest/scripts/marp_to_prompts.py\" ~/.claude/skills/nano-banana-prompt-workflow/scripts/)",
+      "Bash(cp \"/c/Users/sunfi/OneDrive/デスクトップ/antigravitytest/.agents/rules/texttoslide.md\" ~/.claude/skills/nano-banana-prompt-workflow/references/)",
+      "Bash(ls -la \"C:\\\\Users\\\\sunfi\\\\nano-banana-workspace\\\\iteration-1\\\\eval-1\\\\without_skill\\\\outputs\"\" 2>/dev/null || echo \"Directory does not exist yet \")",
+      "Bash(python \"C:\\\\Users\\\\sunfi\\\\.claude\\\\skills\\\\nano-banana-prompt-workflow\\\\scripts\\\\marp_to_prompts.py\" \"C:\\\\Users\\\\sunfi\\\\nano-banana-workspace\\\\iteration-1\\\\eval-1\\\\with_skill\\\\outputs\\\\presentation_slides.md\")",
+      "Bash(python \"C:\\\\Users\\\\sunfi\\\\.claude\\\\skills\\\\nano-banana-prompt-workflow\\\\scripts\\\\marp_to_prompts.py\" \"C:\\\\Users\\\\sunfi\\\\nano-banana-workspace\\\\iteration-1\\\\eval-2\\\\with_skill\\\\outputs\\\\product_presentation_slides.md\")",
+      "Bash(find C:Userssunfinano-banana-workspaceiteration-1eval-2with_skill -type d -name 2026-04-01_*)",
+      "Bash(python \"C:\\\\Users\\\\sunfi\\\\.claude\\\\skills\\\\nano-banana-prompt-workflow\\\\scripts\\\\marp_to_prompts.py\" \"C:\\\\Users\\\\sunfi\\\\nano-banana-workspace\\\\iteration-1\\\\eval-3\\\\with_skill\\\\outputs\\\\teamwork_training_slides.md\")"
+    ],
+    "additionalDirectories": [
+      "C:\\Users\\sunfi\\nano-banana-workspace\\iteration-1\\eval-2\\without_skill\\outputs",
+      "C:\\Users\\sunfi\\nano-banana-workspace\\iteration-1\\eval-3\\without_skill\\outputs"
     ]
   }
 }
