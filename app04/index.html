@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0ea5e9">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Weather Forecast">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%230ea5e9' rx='20'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white'%3E☀️%3C/text%3E%3C/svg%3E">
+    <title>Weather Forecast - 天気予報アプリ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>☀️ Weather Forecast</h1>
+            <p class="subtitle">天気予報と服装アドバイス</p>
+        </header>
+
+        <!-- 検索セクション -->
+        <section class="action-section">
+            <div class="search-container">
+                <input type="text" id="cityInput" placeholder="🔍 都市名を入力（例：東京）" maxlength="50">
+                <button id="searchBtn" class="btn btn-primary">🔍 検索</button>
+                <button id="locationBtn" class="btn btn-secondary" title="現在地を取得">📍</button>
+                <button id="refreshBtn" class="btn btn-secondary" title="更新">🔄</button>
+            </div>
+        </section>
+
+        <!-- 今日の天気カード -->
+        <section class="weather-section">
+            <div class="weather-card today-weather">
+                <div class="weather-header">
+                    <h2>📍 <span id="cityName">-</span></h2>
+                    <span id="updateTime" class="update-time">-</span>
+                </div>
+                <div class="weather-main">
+                    <div class="weather-icon" id="todayIcon">☀️</div>
+                    <div class="weather-temp">
+                        <span id="todayTemp" class="temp">-</span>
+                        <span class="temp-unit">℃</span>
+                    </div>
+                    <div class="weather-description" id="todayDescription">-</div>
+                </div>
+                <div class="weather-details">
+                    <div class="detail-item">
+                        <span class="detail-label">💧 湿度</span>
+                        <span id="todayHumidity" class="detail-value">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">💨 風速</span>
+                        <span id="todayWind" class="detail-value">-</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">🌡️ 体感</span>
+                        <span id="todayFeelsLike" class="detail-value">-</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 服装アドバイスカード -->
+        <section class="clothing-section">
+            <div class="weather-card clothing-card">
+                <h2>👔 服装アドバイス</h2>
+                <div class="gender-toggle">
+                    <button id="maleBtn" class="gender-btn active" data-gender="male">
+                        <span class="gender-icon">👨</span>
+                        <span class="gender-text">男性</span>
+                    </button>
+                    <button id="femaleBtn" class="gender-btn" data-gender="female">
+                        <span class="gender-icon">👩</span>
+                        <span class="gender-text">女性</span>
+                    </button>
+                </div>
+                <div class="clothing-advice" id="clothingAdvice">
+                    <div class="clothing-loading">天気データを取得中...</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3日予報セクション -->
+        <section class="forecast-section">
+            <div class="section-header">
+                <h2>📅 3日予報</h2>
+                <span id="forecastCount" class="forecast-count">3日分</span>
+            </div>
+            <div id="forecastGrid" class="forecast-grid">
+                <div class="empty-state" id="forecastEmptyState">
+                    <p>🌤️ 天気データを読み込み中...</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- APIキー設定モーダル -->
+        <div id="apiKeyModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>⚙️ APIキー設定</h2>
+                    <button id="closeApiKeyModalBtn" class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <p>WeatherAPI.comのAPIキーを設定してください。</p>
+                    <p class="api-help">
+                        🔑 <a href="https://www.weatherapi.com/" target="_blank" rel="noopener">WeatherAPI.com</a>で無料アカウントを作成し、APIキーを取得してください。<br>
+                        <small>※ 無料枠：月1,000,000回のAPI呼び出し</small>
+                    </p>
+                    <form id="apiKeyForm">
+                        <div class="form-group">
+                            <label for="apiKeyInput">APIキー</label>
+                            <input type="text" id="apiKeyInput" placeholder="APIキーを入力..." required>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" id="cancelApiKeyBtn" class="btn btn-secondary">キャンセル</button>
+                            <button type="submit" class="btn btn-primary">保存</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <!-- エラーモーダル -->
+        <div id="errorModal" class="modal">
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h2>⚠️ エラー</h2>
+                    <button id="closeErrorModalBtn" class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMessage">エラーが発生しました。</p>
+                    <div class="form-actions">
+                        <button type="button" id="closeErrorBtn" class="btn btn-primary">閉じる</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p class="footer-text">💾 天気データは30分間キャッシュされます</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Service Workerの登録（HTTP/HTTPSのみ）
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker登録成功:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker登録失敗:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
