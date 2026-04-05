@@ -490,6 +490,40 @@ header h1 {
     justify-content: flex-end;
 }
 
+/* ===== Share Section ===== */
+.header-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.share-description {
+    margin-bottom: 16px;
+    color: var(--text-color);
+}
+
+.share-url-container {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 16px;
+}
+
+.share-url-input {
+    flex: 1;
+    padding: 12px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-family: monospace;
+    background: var(--bg-light);
+    color: var(--text-light);
+}
+
+.share-hint {
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 16px;
+}
+
 /* ===== Footer ===== */
 footer {
     text-align: center;

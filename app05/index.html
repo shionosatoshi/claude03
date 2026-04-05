@@ -81,7 +81,10 @@
         <section class="result-section" id="resultSection" style="display: none;">
             <div class="section-header">
                 <h2>👥 割り勘結果</h2>
-                <button id="clearResultsBtn" class="btn btn-secondary btn-small">クリア</button>
+                <div class="header-actions">
+                    <button id="shareBtn" class="btn btn-primary btn-small">📤 共有</button>
+                    <button id="clearResultsBtn" class="btn btn-secondary btn-small">クリア</button>
+                </div>
             </div>
             <div class="result-grid" id="resultGrid">
                 <!-- 結果カードがここに挿入されます -->
@@ -112,6 +115,27 @@
                     <p id="errorMessage">エラーが発生しました。</p>
                     <div class="form-actions">
                         <button type="button" id="closeErrorBtn" class="btn btn-primary">閉じる</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 共有モーダル -->
+        <div id="shareModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>📤 共有用URL</h2>
+                    <button id="closeShareModalBtn" class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <p class="share-description">以下のURLをコピーして友人に送ってください。</p>
+                    <div class="share-url-container">
+                        <input type="text" id="shareUrlInput" class="share-url-input" readonly>
+                        <button id="copyUrlBtn" class="btn btn-primary">📋 コピー</button>
+                    </div>
+                    <p class="share-hint">💡 このURLを開くと、同じ計算結果が表示されます。</p>
+                    <div class="form-actions">
+                        <button type="button" id="closeShareBtn" class="btn btn-secondary">閉じる</button>
                     </div>
                 </div>
             </div>

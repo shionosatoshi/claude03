@@ -15,6 +15,7 @@ class SplitBillApp {
             calculateBtn: document.getElementById('calculateBtn'),
             clearResultsBtn: document.getElementById('clearResultsBtn'),
             clearHistoryBtn: document.getElementById('clearHistoryBtn'),
+            shareBtn: document.getElementById('shareBtn'),
             resultGrid: document.getElementById('resultGrid'),
             resultSection: document.getElementById('resultSection'),
             statsSection: document.getElementById('statsSection'),
@@ -27,7 +28,12 @@ class SplitBillApp {
             errorModal: document.getElementById('errorModal'),
             errorMessage: document.getElementById('errorMessage'),
             closeErrorModalBtn: document.getElementById('closeErrorModalBtn'),
-            closeErrorBtn: document.getElementById('closeErrorBtn')
+            closeErrorBtn: document.getElementById('closeErrorBtn'),
+            shareModal: document.getElementById('shareModal'),
+            shareUrlInput: document.getElementById('shareUrlInput'),
+            copyUrlBtn: document.getElementById('copyUrlBtn'),
+            closeShareModalBtn: document.getElementById('closeShareModalBtn'),
+            closeShareBtn: document.getElementById('closeShareBtn')
         };
 
         this.init();
@@ -63,6 +69,25 @@ class SplitBillApp {
 
         this.elements.closeErrorBtn.addEventListener('click', () => {
             this.elements.errorModal.classList.remove('active');
+        });
+
+        // 共有ボタン
+        this.elements.shareBtn.addEventListener('click', () => {
+            this.showShareModal();
+        });
+
+        // 共有モーダル
+        this.elements.closeShareModalBtn.addEventListener('click', () => {
+            this.elements.shareModal.classList.remove('active');
+        });
+
+        this.elements.closeShareBtn.addEventListener('click', () => {
+            this.elements.shareModal.classList.remove('active');
+        });
+
+        // URLコピー
+        this.elements.copyUrlBtn.addEventListener('click', () => {
+            this.copyShareUrl();
         });
 
         // Enterキーで計算
@@ -305,9 +330,122 @@ class SplitBillApp {
         this.elements.errorMessage.textContent = message;
         this.elements.errorModal.classList.add('active');
     }
+
+    showShareModal() {
+        if (!this.currentResults) {
+            this.showError('共有する計算結果がありません。');
+            return;
+        }
+
+        // 計算結果をJSON文字列化してBase64エンコード
+        const data = {
+            totalAmount: this.currentResults.totalAmount,
+            peopleCount: this.currentResults.peopleCount,
+            method: this.currentResults.method,
+            amounts: this.currentResults.amounts
+        };
+
+        const jsonString = JSON.stringify(data);
+        const base64Encoded = btoa(unescape(encodeURIComponent(jsonString)));
+
+        // URL生成
+        const url = `${window.location.origin}${window.location.pathname}?data=${base64Encoded}`;
+        this.elements.shareUrlInput.value = url;
+        this.elements.shareModal.classList.add('active');
+    }
+
+    copyShareUrl() {
+        const urlInput = this.elements.shareUrlInput;
+        urlInput.select();
+        urlInput.setSelectionRange(0, 99999); // モバイル対応
+
+        // Clipboard APIを使用
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+            navigator.clipboard.writeText(urlInput.value)
+                .then(() => {
+                    this.elements.copyUrlBtn.textContent = '✅ コピーしました！';
+                    setTimeout(() => {
+                        this.elements.copyUrlBtn.textContent = '📋 コピー';
+                    }, 2000);
+                })
+                .catch(() => {
+                    this.fallbackCopy(urlInput.value);
+                });
+        } else {
+            this.fallbackCopy(urlInput.value);
+        }
+    }
+
+    fallbackCopy(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        textarea.style.position = 'fixed';
+        textarea.style.opacity = '0';
+        document.body.appendChild(textarea);
+        textarea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                this.elements.copyUrlBtn.textContent = '✅ コピーしました！';
+                setTimeout(() => {
+                    this.elements.copyUrlBtn.textContent = '📋 コピー';
+                }, 2000);
+            } else {
+                this.showError('コピーに失敗しました。URLを手動でコピーしてください。');
+            }
+        } catch (err) {
+            this.showError('コピーに失敗しました。URLを手動でコピーしてください。');
+        }
+
+        document.body.removeChild(textarea);
+    }
+
+    loadFromUrl() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const data = urlParams.get('data');
+
+        if (!data) {
+            return;
+        }
+
+        try {
+            // Base64デコードしてJSONパース
+            const jsonString = decodeURIComponent(escape(atob(data)));
+            const results = JSON.parse(jsonString);
+
+            // バリデーション
+            if (!results.totalAmount || !results.peopleCount || !results.method || !results.amounts) {
+                throw new Error('無効なデータ形式');
+            }
+
+            // 計算結果を復元
+            this.currentResults = results;
+            this.elements.totalAmount.value = results.totalAmount;
+            this.elements.peopleCount.value = results.peopleCount;
+
+            // 割り方を復元
+            const radioButtons = document.querySelectorAll('input[name="splitMethod"]');
+            radioButtons.forEach(radio => {
+                if (radio.value === results.method) {
+                    radio.checked = true;
+                }
+            });
+
+            // 結果を表示
+            this.displayResults(results.amounts, results.totalAmount);
+
+            // URLからパラメータを削除
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } catch (error) {
+            console.error('URLからのデータ読み込みエラー:', error);
+            this.showError('無効な共有URLです。');
+        }
+    }
 }
 
 // アプリケーションを初期化
 document.addEventListener('DOMContentLoaded', () => {
-    new SplitBillApp();
+    const app = new SplitBillApp();
+    app.loadFromUrl();
 });
