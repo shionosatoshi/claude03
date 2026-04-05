@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10b981">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="割り勘計算機">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%2310b981' rx='20'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white'%3E💰%3C/text%3E%3C/svg%3E">
+    <title>割り勘計算機 - 金額割り勘アプリ</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>💰 割り勘計算機</h1>
+            <p class="subtitle">金額を人数で割る簡易計算ツール</p>
+        </header>
+
+        <!-- 入力セクション -->
+        <section class="input-section">
+            <div class="input-card">
+                <h2>📝 入力</h2>
+
+                <div class="form-group">
+                    <label for="totalAmount">合計金額（円）</label>
+                    <input type="number" id="totalAmount" min="1" max="1000000" value="10000" placeholder="例：10000">
+                </div>
+
+                <div class="form-group">
+                    <label for="peopleCount">人数</label>
+                    <input type="number" id="peopleCount" min="2" max="100" value="5" placeholder="例：5">
+                </div>
+
+                <div class="form-group">
+                    <label>割り方</label>
+                    <div class="radio-group">
+                        <label class="radio-label">
+                            <input type="radio" name="splitMethod" value="even" checked>
+                            <span class="radio-text">均等に割る</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="splitMethod" value="random">
+                            <span class="radio-text">ランダムに割る</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button id="calculateBtn" class="btn btn-primary">💱 計算する</button>
+            </div>
+        </section>
+
+        <!-- 統計セクション -->
+        <section class="stats-section" id="statsSection" style="display: none;">
+            <div class="stats-card">
+                <h2>📊 統計情報</h2>
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-label">最大</span>
+                        <span class="stat-value" id="maxAmount">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">最小</span>
+                        <span class="stat-value" id="minAmount">-</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">平均</span>
+                        <span class="stat-value" id="avgAmount">-</span>
+                    </div>
+                </div>
+                <div class="total-info">
+                    <span class="total-label">合計:</span>
+                    <span class="total-value" id="totalDisplay">-</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- 結果セクション -->
+        <section class="result-section" id="resultSection" style="display: none;">
+            <div class="section-header">
+                <h2>👥 割り勘結果</h2>
+                <button id="clearResultsBtn" class="btn btn-secondary btn-small">クリア</button>
+            </div>
+            <div class="result-grid" id="resultGrid">
+                <!-- 結果カードがここに挿入されます -->
+            </div>
+        </section>
+
+        <!-- 履歴セクション -->
+        <section class="history-section">
+            <div class="section-header">
+                <h2>📜 履歴</h2>
+                <button id="clearHistoryBtn" class="btn btn-secondary btn-small">全削除</button>
+            </div>
+            <div id="historyList" class="history-list">
+                <div class="empty-state" id="historyEmptyState">
+                    <p>📋 履歴がありません</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- エラーモーダル -->
+        <div id="errorModal" class="modal">
+            <div class="modal-content modal-small">
+                <div class="modal-header">
+                    <h2>⚠️ エラー</h2>
+                    <button id="closeErrorModalBtn" class="close-btn">×</button>
+                </div>
+                <div class="modal-body">
+                    <p id="errorMessage">エラーが発生しました。</p>
+                    <div class="form-actions">
+                        <button type="button" id="closeErrorBtn" class="btn btn-primary">閉じる</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <footer>
+            <p class="footer-text">💾 履歴はブラウザに保存されます</p>
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Service Workerの登録（HTTP/HTTPSのみ）
+        if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then((registration) => {
+                        console.log('ServiceWorker登録成功:', registration.scope);
+                    })
+                    .catch((error) => {
+                        console.log('ServiceWorker登録失敗:', error);
+                    });
+            });
+        }
+    </script>
+</body>
+</html>
