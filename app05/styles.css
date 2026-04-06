@@ -23,31 +23,31 @@
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    font-family: var(--vercel-font-family);
+    background: var(--vercel-gray-lighter);
     min-height: 100vh;
-    color: var(--text-color);
-    line-height: 1.6;
-    padding: 20px;
+    color: var(--text-primary);
+    line-height: var(--vercel-leading-normal);
+    padding: var(--vercel-space-4);
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
 }
 
 .container {
-    max-width: 800px;
+    max-width: var(--vercel-container-md);
     margin: 0 auto;
 }
 
 /* ===== Header ===== */
 header {
     text-align: center;
-    color: white;
-    margin-bottom: 30px;
+    color: var(--vercel-white);
+    margin-bottom: var(--vercel-space-6);
 }
 
 header h1 {
-    font-size: 2.5rem;
-    margin-bottom: 8px;
+    font-size: var(--vercel-text-4xl);
+    margin-bottom: var(--vercel-space-2);
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 

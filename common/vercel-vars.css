@@ -1,0 +1,176 @@
+/**
+ * Vercel Design System - CSS Variables
+ * Inspired by Vercel's clean, minimal aesthetic
+ * Version: 1.0
+ */
+
+:root {
+    /* ===== Colors ===== */
+
+    /* Primary Colors */
+    --vercel-black: #000000;
+    --vercel-white: #ffffff;
+    --vercel-blue: #0070f3;
+    --vercel-blue-hover: #0060df;
+    --vercel-blue-light: #79ffe1;
+
+    /* Gray Scale */
+    --vercel-gray: #797979;
+    --vercel-gray-light: #eaeaea;
+    --vercel-gray-lighter: #fafafa;
+    --vercel-gray-dark: #333333;
+
+    /* Semantic Colors */
+    --text-primary: var(--vercel-black);
+    --text-secondary: var(--vercel-gray);
+    --text-tertiary: #999999;
+    --bg-primary: var(--vercel-white);
+    --bg-secondary: var(--vercel-gray-lighter);
+    --border-color: var(--vercel-gray-light);
+    --accent-primary: var(--vercel-blue);
+    --accent-hover: var(--vercel-blue-hover);
+
+    /* Status Colors */
+    --success: #10b981;
+    --success-light: #d1fae5;
+    --warning: #f59e0b;
+    --warning-light: #fef3c7;
+    --error: #dc2626;
+    --error-light: #fee2e2;
+    --info: #3b82f6;
+    --info-light: #dbeafe;
+
+    /* ===== Typography ===== */
+
+    /* Font Families */
+    --vercel-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+    --vercel-font-mono: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', 'Droid Sans Mono', 'Source Code Pro', monospace;
+
+    /* Font Sizes - 4px base scale */
+    --vercel-text-xs: 11px;
+    --vercel-text-sm: 12px;
+    --vercel-text-base: 14px;
+    --vercel-text-md: 16px;
+    --vercel-text-lg: 18px;
+    --vercel-text-xl: 20px;
+    --vercel-text-2xl: 24px;
+    --vercel-text-3xl: 32px;
+    --vercel-text-4xl: 40px;
+
+    /* Font Weights */
+    --vercel-font-normal: 400;
+    --vercel-font-medium: 500;
+    --vercel-font-semibold: 600;
+    --vercel-font-bold: 700;
+
+    /* Line Heights */
+    --vercel-leading-tight: 1.25;
+    --vercel-leading-normal: 1.5;
+    --vercel-leading-relaxed: 1.75;
+
+    /* Letter Spacing */
+    --vercel-tracking-tight: -0.5px;
+    --vercel-tracking-normal: 0px;
+    --vercel-tracking-wide: 0.5px;
+
+    /* ===== Spacing - 4px base scale ===== */
+    --vercel-space-0: 0px;
+    --vercel-space-1: 4px;
+    --vercel-space-2: 8px;
+    --vercel-space-3: 12px;
+    --vercel-space-4: 16px;
+    --vercel-space-5: 20px;
+    --vercel-space-6: 24px;
+    --vercel-space-8: 32px;
+    --vercel-space-10: 40px;
+    --vercel-space-12: 48px;
+    --vercel-space-16: 64px;
+    --vercel-space-20: 80px;
+
+    /* ===== Borders ===== */
+    --vercel-border-width: 1px;
+    --vercel-border-color: #eaeaea;
+    --vercel-border-radius: 4px;
+    --vercel-border-radius-md: 6px;
+    --vercel-border-radius-lg: 8px;
+    --vercel-border-radius-xl: 12px;
+
+    /* ===== Shadows ===== */
+    --vercel-shadow-xs: 0 1px 2px rgba(0, 0, 0, 0.04);
+    --vercel-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.05);
+    --vercel-shadow-md: 0 4px 8px rgba(0, 0, 0, 0.08);
+    --vercel-shadow-lg: 0 8px 16px rgba(0, 0, 0, 0.1);
+    --vercel-shadow-xl: 0 16px 32px rgba(0, 0, 0, 0.12);
+
+    /* ===== Transitions ===== */
+    --vercel-transition-fast: 150ms ease;
+    --vercel-transition-base: 200ms ease;
+    --vercel-transition-slow: 300ms ease;
+
+    /* ===== Z-Index Scale ===== */
+    --vercel-z-base: 0;
+    --vercel-z-dropdown: 100;
+    --vercel-z-sticky: 200;
+    --vercel-z-fixed: 300;
+    --vercel-z-modal-backdrop: 400;
+    --vercel-z-modal: 500;
+    --vercel-z-popover: 600;
+    --vercel-z-tooltip: 700;
+
+    /* ===== Breakpoints ===== */
+    --vercel-breakpoint-xs: 480px;
+    --vercel-breakpoint-sm: 640px;
+    --vercel-breakpoint-md: 768px;
+    --vercel-breakpoint-lg: 1024px;
+    --vercel-breakpoint-xl: 1280px;
+
+    /* ===== Container Widths ===== */
+    --vercel-container-sm: 600px;
+    --vercel-container-md: 800px;
+    --vercel-container-lg: 1000px;
+    --vercel-container-xl: 1200px;
+}
+
+/* ===== App-Specific Accent Colors ===== */
+
+/* App 01 - Calendar Diary */
+:root {
+    --app01-accent: #667eea;
+    --app01-accent-dark: #764ba2;
+    --app01-accent-hover: #5a67d8;
+}
+
+/* App 02 - RPG ToDo */
+:root {
+    --app02-accent: #8b5cf6;
+    --app02-accent-orange: #f59e0b;
+    --app02-accent-hover: #7c3aed;
+}
+
+/* App 03 - Memo Notes */
+:root {
+    --app03-accent: #3b82f6;
+    --app03-accent-purple: #8b5cf6;
+    --app03-accent-hover: #2563eb;
+}
+
+/* App 04 - Weather Forecast */
+:root {
+    --app04-accent: #0ea5e9;
+    --app04-accent-dark: #0284c7;
+    --app04-accent-hover: #0284c7;
+}
+
+/* App 05 - Split Calculator */
+:root {
+    --app05-accent: #10b981;
+    --app05-accent-dark: #059669;
+    --app05-accent-hover: #059669;
+}
+
+/* App 06 - Random Chatbot */
+:root {
+    --app06-accent: #5a8dee;
+    --app06-accent-dark: #6b7fd4;
+    --app06-accent-hover: #4c7fee;
+}
