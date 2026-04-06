@@ -6,7 +6,7 @@
 
 body {
     font-family: 'Helvetica Neue', Arial, 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', Meiryo, sans-serif;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #5a8dee 0%, #6b7fd4 100%);
     min-height: 100vh;
     display: flex;
     justify-content: center;
@@ -28,7 +28,7 @@ body {
 }
 
 header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #5a8dee 0%, #6b7fd4 100%);
     color: white;
     padding: 20px;
     text-align: center;
@@ -94,7 +94,7 @@ header h1 {
 }
 
 .user-message .message-content {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #5a8dee 0%, #6b7fd4 100%);
     color: white;
     border-bottom-right-radius: 4px;
 }
@@ -126,12 +126,12 @@ header h1 {
 }
 
 #userInput:focus {
-    border-color: #667eea;
+    border-color: #5a8dee;
 }
 
 .send-btn {
     padding: 12px 24px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #5a8dee 0%, #6b7fd4 100%);
     color: white;
     border: none;
     border-radius: 25px;
