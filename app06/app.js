@@ -1,185 +1,368 @@
-// 会話履歴を保持
-let conversationHistory = [];
-
-// ポジティブな返答テンプレート
-const responseTemplates = {
-    greeting: [
-        "こんにちは！今日はどのようなお話をしましょう",
-        "はい！いつでもお話しに乗りますよ",
-        "こんにちは！元気そうですね"
-    ],
-    thanks: [
-        "どういたしまして！またいつでも聞いてくださいね",
-        "こちらこそ、ありがとうございます",
-        "嬉しいです！お役に立てて光栄です"
-    ],
-    sad: [
-        "大丈夫ですね、あなたなら乗り越えられますよ",
-        "辛い時こそ、自分を信じてくださいね",
-        "きっと良くなります。無理しないでください"
-    ],
-    worried: [
-        "まずは一歩ずつ考えていきましょう",
-        "不安な気持ち、分かりますよ。大丈夫です",
-        "あなたならきっと良い解決策が見つかります"
-    ],
-    tired: [
-        "お疲れ様です。今日も頑張りましたね",
-        "休むことも大切な作業ですよ",
-        "ゆっくり休んでくださいね"
-    ],
-    happy: [
-        "それは素晴らしいですね！",
-        "嬉しいお話を聞かせてくれてありがとう",
-        "その調子です！素敵ですね"
-    ],
-    agreement: [
-        "そうですね、良い考えだと思います",
-        "確かにそうですね",
-        "その通りですね！素敵な視点です"
-    ],
-    encouragement: [
-        "応援していますよ！",
-        "あなたならきっとできますよ",
-        "挑戦してみる価値がありそうですね"
-    ],
-    interest: [
-        "それは興味深いですね",
-        "詳しく聞かせてくれませんか",
-        "面白い話題ですね"
-    ]
-};
-
-// メッセージからキーワードを抽出
-function extractKeywords(message) {
-    const keywords = [];
-
-    // 主語・重要名詞のパターン
-    const patterns = {
-        '仕事': /仕事|業務|職場|オフィス/i,
-        '勉強': /勉強|学習|宿題|試験|テスト/i,
-        '家族': /家族|母|父|兄弟|姉妹|親/i,
-        '友達': /友達|友人|仲間|フレンド/i,
-        '健康': /健康|体調|病気|怪我|体/i,
-        'お金': /お金|給料|貯金|料金/i,
-        '天気': /天気|雨|晴れ|雪/i,
-        '趣味': /趣味|遊び|ゲーム|スポーツ/i,
-        '将来': /将来|未来|夢|目標|願望/i,
-        '恋愛': /恋愛|彼女|彼氏|好き|愛/i,
-        '旅行': /旅行|出張|温泉|観光|旅/i,
-        '食べ物': /ご飯|食事|料理|レストラン/i,
-        '昨日': /昨日|きのう/i,
-        '今日': /今日|きょう|本日/i,
-        '明日': /明日|あした/i,
-        '週末': /週末|土日|休み/i
-    };
-
-    for (const [keyword, pattern] of Object.entries(patterns)) {
-        if (pattern.test(message)) {
-            keywords.push(keyword);
-        }
+// ランダム話題テンプレート（全く関係ない話題を3行で出力）
+const randomTopics = [
+    {
+        lines: [
+            "今日は良い天気ですね",
+            "洗濯物がよく乾きそうです",
+            "お気に入りの服は何ですか"
+        ]
+    },
+    {
+        lines: [
+            "最近お腹が空くのが早いです",
+            "お昼ごはんを食べるのが楽しみです",
+            "今日のお昼は何を食べたいですか"
+        ]
+    },
+    {
+        lines: [
+            "昨日新しい本を買いました",
+            "歴史小説でなかなか面白いです",
+            "最近読んだ本でおすすめはありますか"
+        ]
+    },
+    {
+        lines: [
+            "最近少しだけ早起きできています",
+            "朝の空気は気持ちがいいですね",
+            "あなたは朝型ですかそれとも夜型ですか"
+        ]
+    },
+    {
+        lines: [
+            "今週末は映画を見ようと思っています",
+            "久しぶりに映画館に行きたいです",
+            "最近見た映画でおすすめはありますか"
+        ]
+    },
+    {
+        lines: [
+            "お部屋の片付けをしようと思っています",
+            "思った以上に時間がかかりそうです",
+            "片付けのコツのようなものはありますか"
+        ]
+    },
+    {
+        lines: [
+            "最近コーヒーをよく飲みます",
+            "少し豆を変えてみようかなと思います",
+            "あなたはコーヒーはお好きですか"
+        ]
+    },
+    {
+        lines: [
+            "今日は仕事の合間に stretches をしています",
+            "体を動かすと頭がすっきりします",
+            "あなたは定期的に運動をしていますか"
+        ]
+    },
+    {
+        lines: [
+            "昨晩友人と電話で話しました",
+            "久しぶりに話せて楽しかったです",
+            "最近友人と連絡を取りましたか"
+        ]
+    },
+    {
+        lines: [
+            "新しいレシピを試してみようと思っています",
+            "カレーを作ろうかなと考えています",
+            "あなたは料理をするのは好きですか"
+        ]
+    },
+    {
+        lines: [
+            "最近駅まで歩くようにしています",
+            "少し運動不足を感じていました",
+            "あなたは一日どのくらい歩いていますか"
+        ]
+    },
+    {
+        lines: [
+            "今日は出社です",
+            "電車で本を読もうと思います",
+            "通勤時間はどのように過ごしていますか"
+        ]
+    },
+    {
+        lines: [
+            "最近新しい音楽を見つけました",
+            "ジャズを聴くことが増えました",
+            "あなたはどんなジャンルの音楽が好きですか"
+        ]
+    },
+    {
+        lines: [
+            "明日は少し雨が降るようです",
+            "傘を持っていくのを忘れないようにします",
+            "雨の日はどのように過ごすのが好きですか"
+        ]
+    },
+    {
+        lines: [
+            "最近お昼寝をする習慣をつけました",
+            "15分ほど寝ると午後も元気に働けます",
+            "あなたは昼寝をすることはありますか"
+        ]
+    },
+    {
+        lines: [
+            "今週は水曜日が待ち遠しいです",
+            "好きな番組が放送されます",
+            "週末は普段どのように過ごされていますか"
+        ]
+    },
+    {
+        lines: [
+            "新しいカフェを見つけました",
+            "コーヒーとケーキが美味しかったです",
+            "あなたの行きつけのカフェはありますか"
+        ]
+    },
+    {
+        lines: [
+            "最近日記を書いています",
+            "一日の終わりにその日を振り返るのは良いですね",
+            "あなたは日記をつける習慣はありますか"
+        ]
+    },
+    {
+        lines: [
+            "今朝は道路が混んでいました",
+            "少し時間に余裕を持って出て良かったです",
+            "通勤や通学で困ったことはありますか"
+        ]
+    },
+    {
+        lines: [
+            "最近図書館に行くことが増えました",
+            "静かな環境で本を読むのは良いですね",
+            "あなたは図書館をよく利用しますか"
+        ]
+    },
+    {
+        lines: [
+            "昨日は久しぶりにジョギングをしました",
+            "少し疲れましたが気持ちよかったです",
+            "あなたはランニングをすることはありますか"
+        ]
+    },
+    {
+        lines: [
+            "最近家計簿をつけています",
+            "どこにお金が使われているのか把握したいです",
+            "あなたは貯金の目標などはありますか"
+        ]
+    },
+    {
+        lines: [
+            "今日はお腹が空きました",
+            "お昼はラーメンを食べようと思います",
+            "あなたはラーメンはお好きですか"
+        ]
+    },
+    {
+        lines: [
+            "最近少し寒さを感じます",
+            "コートを着ていくのが正解でした",
+            "あなたは寒がりですかそれとも暑がりですか"
+        ]
+    },
+    {
+        lines: [
+            "今週末はショッピングに行こうと思っています",
+            "新しい服を買いたいです",
+            "あなたは服選びは好きですか"
+        ]
+    },
+    {
+        lines: [
+            "最近デジタルデトックスをしています",
+            "寝る1時間前からスマホを見ないようにしています",
+            "あなたは寝る前にスマホを見ますか"
+        ]
+    },
+    {
+        lines: [
+            "昨日は家族と夕食を食べました",
+            "久しぶりにみんなで集まることができました",
+            "あなたは家族とよく会いますか"
+        ]
+    },
+    {
+        lines: [
+            "最近ヨガを始めました",
+            "体が柔らかくなると良いなと思います",
+            "あなたはヨガやストレッチをしますか"
+        ]
+    },
+    {
+        lines: [
+            "今日はリモートワークです",
+            "集中して仕事ができるのは良いですね",
+            "あなたは出社とリモート、どちらが好きですか"
+        ]
+    },
+    {
+        lines: [
+            "最近植物を育てています",
+            "観葉植物が部屋にあると癒やされます",
+            "あなたは植物を育てたことはありますか"
+        ]
+    },
+    {
+        lines: [
+            "昨日は久しぶりに友人と食事に行きました",
+            "新しいイタリアンレストランを開店しました",
+            "あなたはどんなジャンルのお店が好きですか"
+        ]
+    },
+    {
+        lines: [
+            "最近少し早起きしようとしています",
+            "朝の時間を有効活用したいです",
+            "あなたは何時に起きるのが理想ですか"
+        ]
+    },
+    {
+        lines: [
+            "今日は疲れました",
+            "でも良い一日でした",
+            "あなたは今日どのように過ごしましたか"
+        ]
+    },
+    {
+        lines: [
+            "最近犬の散歩を手伝っています",
+            "散歩コースを変えると犬も喜びます",
+            "あなたは動物はお好きですか"
+        ]
+    },
+    {
+        lines: [
+            "今週は忙しくなりそうです",
+            "でも少しずつ進めていこうと思います",
+            "あなたは忙しい時でもリラックスする方法はありますか"
+        ]
+    },
+    {
+        lines: [
+            "最近写真を撮るのが楽しいです",
+            "桜が綺麗に咲いています",
+            "あなたは何の写真を撮るのが好きですか"
+        ]
+    },
+    {
+        lines: [
+            "今日は久しぶりに実家に帰ります",
+            "母の手料理が楽しみです",
+            "あなたは実家にどのくらい帰りますか"
+        ]
+    },
+    {
+        lines: [
+            "最近少し睡眠時間が短いです",
+            "もっと寝るようにしようと思います",
+            "あなたは一日何時間寝ていますか"
+        ]
+    },
+    {
+        lines: [
+            "昨日は美味しいパン屋を見つけました",
+            "クロワッサンが絶品でした",
+            "あなたはパン派ですかそれともご飯派ですか"
+        ]
+    },
+    {
+        lines: [
+            "最近新しい趣味を探しています",
+            "何か面白いことないかなと思います",
+            "あなたの趣味は何ですか"
+        ]
+    },
+    {
+        lines: [
+            "今日は少し頭が痛いです",
+            "早く帰ってゆっくりしたいと思います",
+            "あなたは体調が悪い時はどうしていますか"
+        ]
+    },
+    {
+        lines: [
+            "最近YouTubeを見る時間が増えました",
+            "色々なクリエイターの動画を楽しんでいます",
+            "あなたはよく見るYouTuberはいますか"
+        ]
+    },
+    {
+        lines: [
+            "昨日は駅前の新しいカフェに行きました",
+            "意外と空いていてゆっくりできました",
+            "あなたは一人でカフェに行くことはありますか"
+        ]
+    },
+    {
+        lines: [
+            "最近英語の勉強を再開しました",
+            "久しぶりに単語を覚えています",
+            "あなたは外国語を勉強したことはありますか"
+        ]
+    },
+    {
+        lines: [
+            "今日は少し雨が降っています",
+            "傘を忘れてきて少し濡れてしまいました",
+            "あなたは今日の天気はどうでしたか"
+        ]
+    },
+    {
+        lines: [
+            "最近古いアルバムを見返しました",
+            "子供の頃の写真がたくさんありました",
+            "あなたは子供の頃を思い出すことはありますか"
+        ]
+    },
+    {
+        lines: [
+            "今週末は特別な予定はありません",
+            "のんびり過ごそうと思います",
+            "あなたは休みの日はどのように過ごすのが好きですか"
+        ]
+    },
+    {
+        lines: [
+            "最近少しだけ早歩きをしています",
+            "歩く速さが速いと目的地に早く着きます",
+            "あなたは歩くのは好きですか"
+        ]
+    },
+    {
+        lines: [
+            "昨日は美味しいラーメンを食べました",
+            "新しいお店で替え玉ができるところでした",
+            "あなたはラーメンはどのような味が好きですか"
+        ]
+    },
+    {
+        lines: [
+            "最近ネットフリックスを見ています",
+            "ドラマを一気見してしまいました",
+            "あなたは最近見たドラマでおすすめはありますか"
+        ]
+    },
+    {
+        lines: [
+            "今日は少し肌寒いです",
+            "上着を持ってきてよかったです",
+            "あなたは寒い日は何を着ていますか"
+        ]
     }
+];
 
-    return keywords;
-}
-
-// 感情・意図を検出
-function detectIntent(message) {
-    const lowerMessage = message.toLowerCase();
-
-    if (/(こんにちは|こんばんは|おはよう|やあ|hi|hello)/i.test(lowerMessage)) {
-        return 'greeting';
-    }
-    if (/(ありがとう|サンキュ|感謝|thx|thanks)/i.test(lowerMessage)) {
-        return 'thanks';
-    }
-    if (/(辛い|悲しい|しんどい|つらい|泣ける|めげる|凹む)/i.test(lowerMessage)) {
-        return 'sad';
-    }
-    if (/(不安|心配|悩み|悩む|迷う|どうしよう|困った)/i.test(lowerMessage)) {
-        return 'worried';
-    }
-    if (/(疲れた|しんどい|お疲れ|くたびれた|疲れ)/i.test(lowerMessage)) {
-        return 'tired';
-    }
-    if (/(嬉しい|楽しい|幸せ|happy|ワクワク|興奮|やった)/i.test(lowerMessage)) {
-        return 'happy';
-    }
-    if (/(だよね|よね|そうだよね)/i.test(lowerMessage)) {
-        return 'agreement';
-    }
-    if (/(したい|やりたい|目指す|頑張る|頑張ろう)/i.test(lowerMessage)) {
-        return 'encouragement';
-    }
-
-    return 'interest';
-}
-
-// 文脈に基づいて返答を生成
-function generateContextualResponse(message, intent, keywords) {
-    // 返答テンプレートを選択
-    let templates = responseTemplates[intent] || responseTemplates.interest;
-    let baseResponse = templates[Math.floor(Math.random() * templates.length)];
-
-    // キーワードを使って返答をカスタマイズ
-    if (keywords.length > 0) {
-        const keyword = keywords[0];
-
-        // キーワードに応じた追加の返答
-        const keywordResponses = {
-            '仕事': ['仕事は頑張っていますか', '仕事の話、聞かせてください', '職場はどうですか'],
-            '勉強': ['勉強順調ですか', '頑張ってくださいね', '何を勉強しているんですか'],
-            '家族': ['家族は大切ですよね', 'お家のみなさんは元気ですか', '家族との時間、素敵ですね'],
-            '友達': ['友達との時間、楽しみですね', '友人との関係、大切にしてくださいね'],
-            '健康': ['お体に気をつけてくださいね', '健康第一ですよ', '体調、大丈夫ですか'],
-            'お金': ['お金の話、大切ですよね', '貯金、頑張っていますか'],
-            '天気': ['天気、気になりますよね', '今日は良い天気ですか'],
-            '趣味': ['趣味、素敵ですね', 'リフレッシュ大切ですよ'],
-            '将来': ['将来のこと、考える素晴らしいですね', '夢に向かって頑張ってください'],
-            '恋愛': ['恋愛、素敵ですね', '素敵な出会いがありますように'],
-            '旅行': ['旅行、楽しみですね', 'リフレッシュできて素晴らしいです'],
-            '食べ物': ['美味しいもの、食べてくださいね', '食事、大切ですよね'],
-            '昨日': ['昨日はどうでしたか', '昨日はお疲れ様でした'],
-            '今日': ['今日はどう過ごされますか', '今日も一日頑張ってください'],
-            '明日': ['明日も頑張ってくださいね', '明日の予定はどうですか'],
-            '週末': ['週末、楽しんできてくださいね', '週末の予定はありますか']
-        };
-
-        if (keywordResponses[keyword]) {
-            const additionalResponse = keywordResponses[keyword][Math.floor(Math.random() * keywordResponses[keyword].length)];
-            baseResponse += '。' + additionalResponse;
-        }
-    }
-
-    // 会話履歴を使って文脈を考慮
-    if (conversationHistory.length >= 2) {
-        const previousKeywords = conversationHistory[conversationHistory.length - 2].keywords;
-
-        // 前の話題とキーワードが被っている場合、関連した返答を追加
-        if (keywords.length > 0 && previousKeywords.length > 0) {
-            const matchingKeyword = keywords.find(k => previousKeywords.includes(k));
-            if (matchingKeyword) {
-                const contextResponses = [
-                    `その${matchingKeyword}のこと、もっと聞かせてください`,
-                    `そうですね、${matchingKeyword}は大切ですよね`,
-                    `${matchingKeyword}について、詳しく教えてください`
-                ];
-                baseResponse = contextResponses[Math.floor(Math.random() * contextResponses.length)];
-            }
-        }
-    }
-
-    // 質問文には返答を
-    if (/(ですか|ますか|したの|どう|何)/i.test(message) && !baseResponse.includes('ですか')) {
-        const questionResponses = [
-            ' あなたはどう思いますか',
-            ' 詳しく教えてください',
-            ' どのような点でそう思われますか'
-        ];
-        baseResponse += questionResponses[Math.floor(Math.random() * questionResponses.length)];
-    }
-
-    return baseResponse;
+// ランダムな話題を生成
+function generateRandomResponse() {
+    const randomTopic = randomTopics[Math.floor(Math.random() * randomTopics.length)];
+    return randomTopic.lines.join('\n');
 }
 
 // メッセージを表示
@@ -190,7 +373,21 @@ function addMessage(content, isUser) {
 
     const messageContent = document.createElement('div');
     messageContent.className = 'message-content';
-    messageContent.textContent = content;
+
+    if (isUser) {
+        messageContent.textContent = content;
+    } else {
+        // 複数行の場合、改行で分割して表示
+        const lines = content.split('\n');
+        lines.forEach((line, index) => {
+            const lineDiv = document.createElement('div');
+            lineDiv.textContent = line;
+            if (index > 0) {
+                lineDiv.style.marginTop = '8px';
+            }
+            messageContent.appendChild(lineDiv);
+        });
+    }
 
     messageDiv.appendChild(messageContent);
     chatMessages.appendChild(messageDiv);
@@ -212,28 +409,11 @@ function sendMessage() {
 
     // ユーザーのメッセージを表示
     addMessage(message, true);
-
-    // キーワード抽出と意図検出
-    const keywords = extractKeywords(message);
-    const intent = detectIntent(message);
-
-    // 会話履歴に追加
-    conversationHistory.push({
-        message: message,
-        keywords: keywords,
-        intent: intent
-    });
-
-    // 履歴が長すぎたら古いものを削除（最大10件）
-    if (conversationHistory.length > 10) {
-        conversationHistory.shift();
-    }
-
     userInput.value = '';
 
     // ボットの返答を生成（少し遅延を入れて自然に）
     setTimeout(() => {
-        const response = generateContextualResponse(message, intent, keywords);
+        const response = generateRandomResponse();
         addMessage(response, false);
         sendBtn.disabled = false;
         userInput.focus();
