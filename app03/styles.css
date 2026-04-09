@@ -29,76 +29,74 @@
 }
 
 body {
-    font-family: var(--vercel-font-family);
-    background: var(--vercel-gray-lighter);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
     min-height: 100vh;
-    color: var(--text-primary);
-    line-height: var(--vercel-leading-normal);
-    padding: var(--vercel-space-4);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
 }
 
 .container {
-    max-width: var(--vercel-container-md);
+    max-width: 800px;
     margin: 0 auto;
 }
 
 /* ===== Header ===== */
 header {
     text-align: center;
-    color: var(--vercel-white);
-    margin-bottom: var(--vercel-space-6);
+    color: white;
+    margin-bottom: 30px;
 }
 
 header h1 {
-    font-size: var(--vercel-text-4xl);
-    margin-bottom: var(--vercel-space-2);
+    font-size: 2.5rem;
+    margin-bottom: 8px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .subtitle {
-    font-size: var(--vercel-text-md);
+    font-size: 1.1rem;
     opacity: 0.95;
 }
 
 /* ===== Action Section ===== */
 .action-section {
-    background: var(--vercel-white);
-    border: var(--vercel-border-width) solid var(--vercel-border-color);
-    border-radius: var(--vercel-border-radius-lg);
-    padding: var(--vercel-space-4);
-    margin-bottom: var(--vercel-space-4);
-    box-shadow: var(--vercel-shadow-lg);
+    background: var(--bg-white);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-lg);
 }
 
 .search-container {
-    margin-bottom: var(--vercel-space-4);
+    margin-bottom: 15px;
 }
 
 #searchInput {
     width: 100%;
-    padding: var(--vercel-space-3) var(--vercel-space-4);
-    border: var(--vercel-border-width) solid var(--vercel-border-color);
-    border-radius: var(--vercel-border-radius);
-    font-size: var(--vercel-text-base);
-    transition: border-color var(--vercel-transition-base);
+    padding: 12px 16px;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: border-color 0.3s;
 }
 
 #searchInput:focus {
     outline: none;
-    border-color: var(--vercel-blue);
-    box-shadow: 0 0 0 2px rgba(0, 112, 243, 0.1);
+    border-color: var(--primary-color);
 }
 
 .btn-large {
     width: 100%;
-    padding: var(--vercel-space-4) var(--vercel-space-6);
-    font-size: var(--vercel-text-md);
+    padding: 14px 20px;
+    font-size: 1.1rem;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: var(--vercel-space-2);
+    gap: 8px;
 }
 
 .btn-icon {

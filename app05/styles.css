@@ -23,31 +23,31 @@
 }
 
 body {
-    font-family: var(--vercel-font-family);
-    background: var(--vercel-gray-lighter);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
     min-height: 100vh;
-    color: var(--text-primary);
-    line-height: var(--vercel-leading-normal);
-    padding: var(--vercel-space-4);
+    color: var(--text-color);
+    line-height: 1.6;
+    padding: 20px;
     -webkit-tap-highlight-color: transparent;
     touch-action: manipulation;
 }
 
 .container {
-    max-width: var(--vercel-container-md);
+    max-width: 800px;
     margin: 0 auto;
 }
 
 /* ===== Header ===== */
 header {
     text-align: center;
-    color: var(--vercel-white);
-    margin-bottom: var(--vercel-space-6);
+    color: white;
+    margin-bottom: 30px;
 }
 
 header h1 {
-    font-size: var(--vercel-text-4xl);
-    margin-bottom: var(--vercel-space-2);
+    font-size: 2.5rem;
+    margin-bottom: 8px;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
 }
 
