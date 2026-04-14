@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#a855f7">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="サブスク管理">
+    <link rel="manifest" href="manifest.json">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23a855f7' rx='20'/%3E%3Ctext x='50' y='70' font-size='60' text-anchor='middle' fill='white'%3E📊%3C/text%3E%3C/svg%3E">
+    <title>サブスク管理 - サブスクリプション管理アプリ</title>
+    <link rel="stylesheet" href="../common/vercel-vars.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>📊 サブスク管理</h1>
+            <p class="subtitle">月々のサブスクリプションを把握</p>
+        </header>
+
+        <!-- 合計金額表示 -->
+        <section class="total-section">
+            <div class="total-card">
+                <div class="total-label">月額合計</div>
+                <div class="total-value" id="totalMonthly">¥0</div>
+                <div class="total-items"><span id="subscriptionCount">0</span>件のサブスクリプション</div>
+            </div>
+        </section>
+
+        <!-- メインコンテンツ -->
+        <div class="main-content">
+            <!-- 円グラフセクション -->
+            <section class="chart-section">
+                <div class="chart-card">
+                    <h2>支出比率</h2>
+                    <div class="chart-container">
+                        <canvas id="subscriptionChart"></canvas>
+                        <div class="chart-empty" id="chartEmpty">
+                            <p>サブスクリプションを追加すると<br>ここに円グラフが表示されます</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- サブスクリプションリスト -->
+            <section class="list-section">
+                <div class="list-header">
+                    <h2>サブスクリプション一覧</h2>
+                    <button id="openAddModalBtn" class="btn btn-primary">
+                        <span class="btn-icon">+</span> 追加
+                    </button>
+                </div>
+                <div id="subscriptionList" class="subscription-list">
+                    <div class="empty-state" id="emptyState">
+                        <p>サブスクリプションがありません</p>
+                        <p class="empty-sub">右上の「追加」ボタンから追加できます</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- 設定ボタン -->
+        <div class="settings-section">
+            <button id="openSettingsBtn" class="btn btn-secondary btn-small">⚙️ 設定</button>
+        </div>
+    </div>
+
+    <!-- 追加/編集モーダル -->
+    <div class="modal" id="subscriptionModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="modalTitle">サブスクリプションを追加</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <form id="subscriptionForm" class="modal-body">
+                <input type="hidden" id="subscriptionId">
+
+                <div class="form-group">
+                    <label for="presetSelect">サービスを選択</label>
+                    <select id="presetSelect">
+                        <option value="">-- プリセットから選択 --</option>
+                        <optgroup label="🎬 動画配信">
+                            <option value="netflix-standard">Netflix (スタンダード)</option>
+                            <option value="netflix-premium">Netflix (プレミアム)</option>
+                            <option value="youtube-premium">YouTube Premium</option>
+                            <option value="amazon-prime">Amazon Prime Video</option>
+                            <option value="disney-plus">Disney+</option>
+                            <option value="unext">U-NEXT</option>
+                            <option value="hulu">Hulu</option>
+                            <option value="dazn">DAZN</option>
+                        </optgroup>
+                        <optgroup label="🎵 音楽">
+                            <option value="apple-music">Apple Music</option>
+                            <option value="spotify">Spotify</option>
+                            <option value="amazon-music">Amazon Music Unlimited</option>
+                            <option value="youtube-music">YouTube Music</option>
+                            <option value="line-music">LINE MUSIC</option>
+                        </optgroup>
+                        <optgroup label="💾 ストレージ">
+                            <option value="google-one">Google One (200GB)</option>
+                            <option value="icloud-plus">iCloud+ (200GB)</option>
+                            <option value="dropbox-plus">Dropbox Plus</option>
+                        </optgroup>
+                        <optgroup label="🎨 ソフトウェア">
+                            <option value="adobe-cc">Adobe Creative Cloud</option>
+                            <option value="microsoft-365">Microsoft 365 Personal</option>
+                            <option value="figma-pro">Figma Professional</option>
+                            <option value="chatgpt-plus">ChatGPT Plus</option>
+                            <option value="notion-personal">Notion Personal</option>
+                            <option value="canva-pro">Canva Pro</option>
+                        </optgroup>
+                        <optgroup label="🎮 ゲーム">
+                            <option value="game-pass">Xbox Game Pass</option>
+                            <option value="ps-plus">PlayStation Plus</option>
+                            <option value="nso">Nintendo Switch Online</option>
+                        </optgroup>
+                        <optgroup label="📰 ニュース・雑誌">
+                            <option value="nikkei-mj">日経MJ</option>
+                            <option value="youtube-premium-news">YouTube Premium (ニュース専用)</option>
+                        </optgroup>
+                        <option value="other">その他（自由入力）</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="serviceName">サービス名 *</label>
+                    <input type="text" id="serviceName" required placeholder="例: Netflix, Spotify" maxlength="50" disabled>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="amount">金額 *</label>
+                        <input type="number" id="amount" required min="0" step="0.01" placeholder="1000">
+                    </div>
+                    <div class="form-group">
+                        <label for="currency">通貨</label>
+                        <select id="currency">
+                            <option value="JPY">JPY (¥)</option>
+                            <option value="USD">USD ($)</option>
+                            <option value="EUR">EUR (€)</option>
+                            <option value="GBP">GBP (£)</option>
+                            <option value="CNY">CNY (¥)</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="cycle">支払い周期</label>
+                    <select id="cycle">
+                        <option value="monthly">月額</option>
+                        <option value="yearly">年額</option>
+                        <option value="weekly">週額</option>
+                        <option value="daily">日額</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">カテゴリ（任意）</label>
+                    <select id="category">
+                        <option value="">選択しない</option>
+                        <option value="video">動画配信</option>
+                        <option value="music">音楽</option>
+                        <option value="software">ソフトウェア</option>
+                        <option value="game">ゲーム</option>
+                        <option value="storage">クラウドストレージ</option>
+                        <option value="news">ニュース・雑誌</option>
+                        <option value="fitness">フィットネス</option>
+                        <option value="education">教育</option>
+                        <option value="other">その他</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="color">グラフの色</label>
+                    <div class="color-picker">
+                        <input type="color" id="color" value="#a855f7">
+                        <button type="button" class="btn btn-secondary btn-small" id="randomColorBtn">ランダム</button>
+                    </div>
+                </div>
+
+                <div class="monthly-preview" id="monthlyPreview">
+                    <span class="preview-label">月額換算:</span>
+                    <span class="preview-value" id="monthlyPreviewValue">¥0</span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelBtn">キャンセル</button>
+                    <button type="submit" class="btn btn-primary">保存</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 設定モーダル -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>設定</h2>
+                <button class="close-btn" id="closeSettingsBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="displayCurrency">表示通貨</label>
+                    <select id="displayCurrency">
+                        <option value="JPY">JPY (¥)</option>
+                        <option value="USD">USD ($)</option>
+                        <option value="EUR">EUR (€)</option>
+                        <option value="GBP">GBP (£)</option>
+                        <option value="CNY">CNY (¥)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label>データ管理</label>
+                    <div class="data-actions">
+                        <button type="button" class="btn btn-secondary btn-small" id="exportBtn">📤 エクスポート</button>
+                        <button type="button" class="btn btn-secondary btn-small" id="importBtn">📥 インポート</button>
+                        <button type="button" class="btn btn-danger btn-small" id="clearAllBtn">🗑️ 全削除</button>
+                    </div>
+                    <input type="file" id="importFile" accept=".json" style="display: none;">
+                </div>
+
+                <div class="form-actions">
+                    <button type="button" class="btn btn-primary" id="closeSettingsOkBtn">閉じる</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 削除確認モーダル -->
+    <div class="modal" id="deleteModal">
+        <div class="modal-content modal-small">
+            <div class="modal-header">
+                <h2>削除の確認</h2>
+                <button class="close-btn" id="closeDeleteModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p><span id="deleteTargetName"></span>を削除しますか？</p>
+                <p class="delete-warning">この操作は取り消せません。</p>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" id="cancelDeleteBtn">キャンセル</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteBtn">削除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

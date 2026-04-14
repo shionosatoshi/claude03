@@ -174,3 +174,10 @@
     --app06-accent-dark: #6b7fd4;
     --app06-accent-hover: #4c7fee;
 }
+
+/* App 07 - Subscription Manager */
+:root {
+    --app07-accent: #a855f7;
+    --app07-accent-dark: #9333ea;
+    --app07-accent-hover: #7c3aed;
+}
