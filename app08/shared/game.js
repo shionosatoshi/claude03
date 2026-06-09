@@ -20,6 +20,7 @@
     const storageKey = `brick-sprint-best-${platform}`;
     const colors = ['#e05535', '#f2bc57', '#72c8b7', '#467cc2', '#b67fc6'];
     const brickCount = 42;
+    const initialLives = 2;
     const baseSpeed = isMobile ? 680 : 735;
 
     const state = {
@@ -30,12 +31,13 @@
         won: false,
         score: 0,
         best: Number(localStorage.getItem(storageKey) || 0),
-        lives: 3,
+        lives: initialLives,
         level: 1,
+        stageSpeedBoosted: false,
         keys: new Set(),
         pointerActive: false,
         lastTime: 0,
-        paddle: { x: 360, y: 1165, width: isMobile ? 245 : 210, height: 28, speed: isMobile ? 880 : 980 },
+        paddle: { x: 360, y: 1165, width: isMobile ? 205 : 175, height: 28, speed: isMobile ? 880 : 980 },
         ballRadius: 15,
         ballSpeed: baseSpeed,
         balls: [],
@@ -130,6 +132,7 @@
         const brickHeight = 46;
         const slots = [];
         state.bricks = [];
+        state.stageSpeedBoosted = false;
 
         for (let row = 0; row < rows; row += 1) {
             for (let col = 0; col < columns; col += 1) {
@@ -178,7 +181,7 @@
     function startGame(fresh) {
         if (fresh) {
             state.score = 0;
-            state.lives = 3;
+            state.lives = initialLives;
             state.level = 1;
             state.ballSpeed = baseSpeed;
             state.gameOver = false;
@@ -229,6 +232,24 @@
         resetBalls();
         updateHud();
         showOverlay(`Level ${state.level}`, isMobile ? 'Launch をタップして続行' : 'Space で続行');
+    }
+
+    function boostStageSpeed() {
+        if (state.stageSpeedBoosted) return;
+
+        const destroyedCount = state.bricks.filter((brick) => brick.destroyed).length;
+        if (destroyedCount < Math.ceil(brickCount / 3)) return;
+
+        state.stageSpeedBoosted = true;
+        state.ballSpeed *= 1.18;
+
+        for (const ball of state.balls) {
+            const currentSpeed = Math.hypot(ball.dx, ball.dy) || ball.speed;
+            const speedRatio = (ball.speed * 1.18) / currentSpeed;
+            ball.dx *= speedRatio;
+            ball.dy *= speedRatio;
+            ball.speed *= 1.18;
+        }
     }
 
     function endGame(won) {
@@ -320,6 +341,7 @@
                 }
 
                 playBrickSound(destroyed);
+                if (destroyed) boostStageSpeed();
                 updateHud();
                 break;
             }
