@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#10202b">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Brick Sprint">
+    <link rel="manifest" href="../shared/manifest.webmanifest">
+    <link rel="stylesheet" href="../../common/vercel-vars.css">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <title>Brick Sprint Mobile</title>
+</head>
+<body data-platform="mobile">
+    <main class="app-shell">
+        <section class="game-stage" aria-label="Brick Sprint mobile game">
+            <div class="hud">
+                <div>
+                    <span class="hud-label">Score</span>
+                    <strong id="score">0</strong>
+                </div>
+                <div>
+                    <span class="hud-label">Best</span>
+                    <strong id="bestScore">0</strong>
+                </div>
+                <div>
+                    <span class="hud-label">Lives</span>
+                    <strong id="lives">3</strong>
+                </div>
+                <div>
+                    <span class="hud-label">Level</span>
+                    <strong id="level">1</strong>
+                </div>
+            </div>
+
+            <div class="canvas-wrap">
+                <canvas id="gameCanvas" width="960" height="1280" aria-label="ブロック崩しのプレイ画面"></canvas>
+                <div class="overlay is-visible" id="overlay">
+                    <h1>Brick Sprint</h1>
+                    <p id="statusText">指を左右に動かしてパドルを操作</p>
+                    <button class="primary-action" id="startBtn" type="button">Start</button>
+                </div>
+            </div>
+
+            <div class="controls mobile-controls" aria-label="Game controls">
+                <button id="pauseBtn" type="button">Pause</button>
+                <button id="launchBtn" type="button">Launch</button>
+                <button id="restartBtn" type="button">Restart</button>
+            </div>
+        </section>
+    </main>
+    <script src="../shared/game.js"></script>
+</body>
+</html>

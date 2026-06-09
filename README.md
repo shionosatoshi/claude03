@@ -25,6 +25,17 @@ Claude Code アプリケーション
 
 ---
 
+## app08 - Brick Sprint
+
+Mobile and desktop friendly block breaker game.
+
+- Mobile URL: `https://shionosatoshi.github.io/claude03/app08/mobile/`
+- Desktop URL: `https://shionosatoshi.github.io/claude03/app08/desktop/`
+- Local mobile entry: [`app08/mobile/index.html`](app08/mobile/index.html)
+- Local desktop entry: [`app08/desktop/index.html`](app08/desktop/index.html)
+
+See [`app08/README.md`](app08/README.md) for controls and deployment notes.
+
 ## app02 - RPG風ToDoリスト 🎮
 
 ゲーム要素を取り入れたToDoリストアプリです。ToDoを完了してボスを倒そう！
@@ -217,4 +228,3 @@ Claude Code アプリケーション
 - HTML5
 - CSS3（グラデーションデザイン、アニメーション、レスポンシブ）
 - Vanilla JavaScript
-

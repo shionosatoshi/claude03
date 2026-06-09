@@ -1,0 +1,19 @@
+{
+    "name": "Brick Sprint",
+    "short_name": "Brick Sprint",
+    "description": "スマホとPCで遊べるブロック崩しゲーム",
+    "start_url": "../mobile/",
+    "scope": "../",
+    "display": "standalone",
+    "background_color": "#10202b",
+    "theme_color": "#10202b",
+    "orientation": "portrait",
+    "icons": [
+        {
+            "src": "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Crect width='512' height='512' rx='96' fill='%2310202b'/%3E%3Crect x='88' y='110' width='336' height='58' rx='12' fill='%23e05535'/%3E%3Crect x='88' y='196' width='154' height='58' rx='12' fill='%23f2bc57'/%3E%3Crect x='270' y='196' width='154' height='58' rx='12' fill='%2372c8b7'/%3E%3Ccircle cx='256' cy='326' r='32' fill='%23f2bc57'/%3E%3Crect x='150' y='394' width='212' height='34' rx='17' fill='%23f5f7f2'/%3E%3C/svg%3E",
+            "sizes": "512x512",
+            "type": "image/svg+xml",
+            "purpose": "any maskable"
+        }
+    ]
+}

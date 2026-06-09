@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#10202b">
+    <link rel="manifest" href="../shared/manifest.webmanifest">
+    <link rel="stylesheet" href="../../common/vercel-vars.css">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <title>Brick Sprint Desktop</title>
+</head>
+<body data-platform="desktop">
+    <main class="app-shell">
+        <aside class="side-panel" aria-label="Game information">
+            <p class="eyebrow">Block Breaker</p>
+            <h1>Brick Sprint</h1>
+            <p class="intro">矢印キー、A/D、マウスでパドルを動かして全ブロックを壊します。</p>
+            <div class="tips">
+                <span>Space: launch / pause</span>
+                <span>R: restart</span>
+                <span>Mouse: paddle control</span>
+            </div>
+        </aside>
+
+        <section class="game-stage" aria-label="Brick Sprint desktop game">
+            <div class="hud">
+                <div>
+                    <span class="hud-label">Score</span>
+                    <strong id="score">0</strong>
+                </div>
+                <div>
+                    <span class="hud-label">Best</span>
+                    <strong id="bestScore">0</strong>
+                </div>
+                <div>
+                    <span class="hud-label">Lives</span>
+                    <strong id="lives">3</strong>
+                </div>
+                <div>
+                    <span class="hud-label">Level</span>
+                    <strong id="level">1</strong>
+                </div>
+            </div>
+
+            <div class="canvas-wrap">
+                <canvas id="gameCanvas" width="960" height="1280" aria-label="ブロック崩しのプレイ画面"></canvas>
+                <div class="overlay is-visible" id="overlay">
+                    <h1>Brick Sprint</h1>
+                    <p id="statusText">Space または Start で開始</p>
+                    <button class="primary-action" id="startBtn" type="button">Start</button>
+                </div>
+            </div>
+
+            <div class="controls desktop-controls" aria-label="Game controls">
+                <button id="pauseBtn" type="button">Pause</button>
+                <button id="launchBtn" type="button">Launch</button>
+                <button id="restartBtn" type="button">Restart</button>
+            </div>
+        </section>
+    </main>
+    <script src="../shared/game.js"></script>
+</body>
+</html>
