@@ -1,4 +1,4 @@
-const CACHE_NAME = 'brick-sprint-v5';
+const CACHE_NAME = 'brick-sprint-v6';
 const ASSETS = [
     './mobile/',
     './desktop/',

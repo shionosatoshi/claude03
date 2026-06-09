@@ -51,7 +51,7 @@
         balls: [],
         audioContext: null,
         soundBurstIndex: 0,
-        soundBurstResetTimer: null,
+        lastSoundAt: -1,
         bricks: []
     };
 
@@ -74,17 +74,19 @@
     }
 
     function scheduleBrickSound(audio, destroyed) {
-        const burstIndex = state.soundBurstIndex;
-        const soundOffset = Math.min(burstIndex, 5) * 0.035;
+        const audioNow = audio.currentTime;
+
+        if (state.lastSoundAt < 0 || audioNow - state.lastSoundAt > 0.075) {
+            state.soundBurstIndex = 0;
+        }
+
+        const burstIndex = state.soundBurstIndex % 6;
+        const soundOffset = Math.min(burstIndex, 4) * 0.018;
         const pitchOffset = (burstIndex % 4) * 42;
         state.soundBurstIndex += 1;
+        state.lastSoundAt = audioNow;
 
-        window.clearTimeout(state.soundBurstResetTimer);
-        state.soundBurstResetTimer = window.setTimeout(() => {
-            state.soundBurstIndex = 0;
-        }, 120);
-
-        const now = audio.currentTime + soundOffset;
+        const now = audioNow + soundOffset;
         const oscillator = audio.createOscillator();
         const gain = audio.createGain();
         oscillator.type = destroyed ? 'triangle' : 'square';
