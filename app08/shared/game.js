@@ -40,6 +40,8 @@
         ballSpeed: baseSpeed,
         balls: [],
         audioContext: null,
+        soundBurstIndex: 0,
+        soundBurstResetTimer: null,
         bricks: []
     };
 
@@ -69,12 +71,22 @@
         const audio = getAudioContext();
         if (!audio) return;
 
-        const now = audio.currentTime;
+        const burstIndex = state.soundBurstIndex;
+        const soundOffset = Math.min(burstIndex, 5) * 0.035;
+        const pitchOffset = (burstIndex % 4) * 42;
+        state.soundBurstIndex += 1;
+
+        window.clearTimeout(state.soundBurstResetTimer);
+        state.soundBurstResetTimer = window.setTimeout(() => {
+            state.soundBurstIndex = 0;
+        }, 120);
+
+        const now = audio.currentTime + soundOffset;
         const oscillator = audio.createOscillator();
         const gain = audio.createGain();
         oscillator.type = destroyed ? 'triangle' : 'square';
-        oscillator.frequency.setValueAtTime(destroyed ? 720 : 520, now);
-        oscillator.frequency.exponentialRampToValueAtTime(destroyed ? 980 : 760, now + 0.045);
+        oscillator.frequency.setValueAtTime((destroyed ? 720 : 520) + pitchOffset, now);
+        oscillator.frequency.exponentialRampToValueAtTime((destroyed ? 980 : 760) + pitchOffset, now + 0.045);
         gain.gain.setValueAtTime(0.0001, now);
         gain.gain.exponentialRampToValueAtTime(destroyed ? 0.08 : 0.055, now + 0.008);
         gain.gain.exponentialRampToValueAtTime(0.0001, now + 0.09);
