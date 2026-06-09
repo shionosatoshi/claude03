@@ -22,6 +22,14 @@
     const brickCount = 42;
     const initialLives = 2;
     const baseSpeed = isMobile ? 680 : 735;
+    const basePaddleWidth = isMobile ? 205 : 175;
+    const minPaddleWidth = isMobile ? 132 : 112;
+    const stageBoostSteps = [
+        { destroyed: 14, speed: 1.12, paddle: 0.92 },
+        { destroyed: 21, speed: 1.10, paddle: 0.92 },
+        { destroyed: 28, speed: 1.09, paddle: 0.93 },
+        { destroyed: 35, speed: 1.08, paddle: 0.94 }
+    ];
 
     const state = {
         running: false,
@@ -33,11 +41,11 @@
         best: Number(localStorage.getItem(storageKey) || 0),
         lives: initialLives,
         level: 1,
-        stageSpeedBoosted: false,
+        stageBoostIndex: 0,
         keys: new Set(),
         pointerActive: false,
         lastTime: 0,
-        paddle: { x: 360, y: 1165, width: isMobile ? 205 : 175, height: 28, speed: isMobile ? 880 : 980 },
+        paddle: { x: 360, y: 1165, width: basePaddleWidth, height: 28, speed: isMobile ? 880 : 980 },
         ballRadius: 15,
         ballSpeed: baseSpeed,
         balls: [],
@@ -62,17 +70,10 @@
             state.audioContext = new AudioContext();
         }
 
-        if (state.audioContext.state === 'suspended') {
-            state.audioContext.resume().catch(() => {});
-        }
-
         return state.audioContext;
     }
 
-    function playBrickSound(destroyed) {
-        const audio = getAudioContext();
-        if (!audio) return;
-
+    function scheduleBrickSound(audio, destroyed) {
         const burstIndex = state.soundBurstIndex;
         const soundOffset = Math.min(burstIndex, 5) * 0.035;
         const pitchOffset = (burstIndex % 4) * 42;
@@ -96,6 +97,27 @@
         gain.connect(audio.destination);
         oscillator.start(now);
         oscillator.stop(now + 0.1);
+    }
+
+    function playBrickSound(destroyed) {
+        const audio = getAudioContext();
+        if (!audio) return;
+
+        if (audio.state === 'suspended') {
+            audio.resume()
+                .then(() => scheduleBrickSound(audio, destroyed))
+                .catch(() => {});
+            return;
+        }
+
+        scheduleBrickSound(audio, destroyed);
+    }
+
+    function primeAudio() {
+        const audio = getAudioContext();
+        if (audio && audio.state === 'suspended') {
+            audio.resume().catch(() => {});
+        }
     }
 
     function makeBall(index, count) {
@@ -132,7 +154,7 @@
         const brickHeight = 46;
         const slots = [];
         state.bricks = [];
-        state.stageSpeedBoosted = false;
+        state.stageBoostIndex = 0;
 
         for (let row = 0; row < rows; row += 1) {
             for (let col = 0; col < columns; col += 1) {
@@ -184,6 +206,7 @@
             state.lives = initialLives;
             state.level = 1;
             state.ballSpeed = baseSpeed;
+            state.paddle.width = basePaddleWidth;
             state.gameOver = false;
             state.won = false;
             state.paddle.x = (world.width - state.paddle.width) / 2;
@@ -191,7 +214,7 @@
             resetBalls();
         }
 
-        getAudioContext();
+        primeAudio();
         state.running = true;
         state.paused = false;
         overlay.classList.remove('is-visible');
@@ -228,28 +251,41 @@
         state.level += 1;
         state.score += 500;
         state.ballSpeed += 38;
+        state.paddle.width = basePaddleWidth;
+        state.paddle.x = clamp(state.paddle.x, 18, world.width - state.paddle.width - 18);
         createBricks();
         resetBalls();
         updateHud();
         showOverlay(`Level ${state.level}`, isMobile ? 'Launch をタップして続行' : 'Space で続行');
     }
 
-    function boostStageSpeed() {
-        if (state.stageSpeedBoosted) return;
-
+    function applyStageBoost() {
         const destroyedCount = state.bricks.filter((brick) => brick.destroyed).length;
-        if (destroyedCount < Math.ceil(brickCount / 3)) return;
+        let boosted = false;
 
-        state.stageSpeedBoosted = true;
-        state.ballSpeed *= 1.18;
+        while (
+            state.stageBoostIndex < stageBoostSteps.length &&
+            destroyedCount >= stageBoostSteps[state.stageBoostIndex].destroyed
+        ) {
+            const boost = stageBoostSteps[state.stageBoostIndex];
+            state.stageBoostIndex += 1;
+            state.ballSpeed *= boost.speed;
+            state.paddle.width = Math.max(minPaddleWidth, state.paddle.width * boost.paddle);
+            state.paddle.x = clamp(state.paddle.x, 18, world.width - state.paddle.width - 18);
 
-        for (const ball of state.balls) {
-            const currentSpeed = Math.hypot(ball.dx, ball.dy) || ball.speed;
-            const speedRatio = (ball.speed * 1.18) / currentSpeed;
-            ball.dx *= speedRatio;
-            ball.dy *= speedRatio;
-            ball.speed *= 1.18;
+            for (const ball of state.balls) {
+                const currentSpeed = Math.hypot(ball.dx, ball.dy) || ball.speed;
+                const nextSpeed = ball.speed * boost.speed;
+                const speedRatio = nextSpeed / currentSpeed;
+                ball.dx *= speedRatio;
+                ball.dy *= speedRatio;
+                ball.speed = nextSpeed;
+            }
+
+            boosted = true;
         }
+
+        if (boosted && state.waitingLaunch) alignWaitingBalls();
     }
 
     function endGame(won) {
@@ -341,7 +377,7 @@
                 }
 
                 playBrickSound(destroyed);
-                if (destroyed) boostStageSpeed();
+                if (destroyed) applyStageBoost();
                 updateHud();
                 break;
             }
@@ -454,18 +490,29 @@
     }
 
     startBtn.addEventListener('click', () => {
+        primeAudio();
         if (state.gameOver || state.won || !state.running) {
             startGame(true);
         } else if (state.paused) {
             togglePause();
         }
     });
-    pauseBtn.addEventListener('click', togglePause);
-    launchBtn.addEventListener('click', launchBall);
-    restartBtn.addEventListener('click', () => startGame(true));
+    pauseBtn.addEventListener('click', () => {
+        primeAudio();
+        togglePause();
+    });
+    launchBtn.addEventListener('click', () => {
+        primeAudio();
+        launchBall();
+    });
+    restartBtn.addEventListener('click', () => {
+        primeAudio();
+        startGame(true);
+    });
 
     window.addEventListener('keydown', (event) => {
         if (['ArrowLeft', 'ArrowRight', 'Space'].includes(event.code)) event.preventDefault();
+        primeAudio();
 
         if (event.code === 'Space') {
             if (!state.running || state.gameOver || state.won) startGame(true);
@@ -480,6 +527,7 @@
     window.addEventListener('keyup', (event) => state.keys.delete(event.code));
 
     canvas.addEventListener('pointerdown', (event) => {
+        primeAudio();
         state.pointerActive = true;
         canvas.setPointerCapture(event.pointerId);
         movePaddleTo(event.clientX);
