@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+    <meta name="theme-color" content="#14231f">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Octa Othello">
+    <link rel="manifest" href="../shared/manifest.webmanifest">
+    <link rel="stylesheet" href="../../common/vercel-vars.css">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <title>Octa Othello Mobile</title>
+</head>
+<body data-platform="mobile">
+    <main class="app-shell">
+        <section class="game-stage" aria-label="Octa Othello mobile game">
+            <header class="mobile-header">
+                <p class="eyebrow">Shape Othello</p>
+                <h1>Octa Othello</h1>
+            </header>
+
+            <div class="top-bar">
+                <div class="score-card black">
+                    <span>Black</span>
+                    <strong id="blackScore">2</strong>
+                </div>
+                <div class="turn-card">
+                    <span id="turnLabel">Black turn</span>
+                    <strong id="statusLabel">候補をタップ</strong>
+                </div>
+                <div class="score-card white">
+                    <span>White</span>
+                    <strong id="whiteScore">2</strong>
+                </div>
+            </div>
+
+            <div class="difficulty-panel" aria-label="CPU difficulty">
+                <span>CPU難易度</span>
+                <button id="mediumDifficultyBtn" type="button" class="is-active">中</button>
+                <button id="strongDifficultyBtn" type="button">強</button>
+            </div>
+
+            <div class="board-shell">
+                <div id="board" class="board" role="grid" aria-label="四隅欠け八角形オセロ盤"></div>
+            </div>
+
+            <section class="rules-strip" aria-label="追加ルール">
+                灰色マスは置けない・またげない。勝敗は有効マスの石数で判定。
+            </section>
+
+            <div class="controls" aria-label="ゲーム操作">
+                <button id="cpuModeBtn" type="button" class="is-active">CPU戦</button>
+                <button id="twoPlayerBtn" type="button">2人対戦</button>
+                <button id="hintBtn" type="button" aria-pressed="true">候補ON</button>
+                <button id="rulesBtn" type="button">ルール</button>
+                <button id="resetBtn" type="button" class="primary-action">リセット</button>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="rulesDialog" class="rules-dialog">
+        <h2>Octa Othello の遊び方</h2>
+        <p>基本は通常のオセロと同じです。四隅を削った盤面なので、角の価値が複数の端点に分散します。</p>
+        <ul>
+            <li>灰色の欠けマスには置けません。</li>
+            <li>欠けマスや盤面外をまたいで石は反転しません。</li>
+            <li>置ける場所がない場合は自動でパスします。</li>
+            <li>両者が置けない、または有効マスが埋まると終了です。</li>
+        </ul>
+        <button id="closeRulesBtn" type="button" class="primary-action">閉じる</button>
+    </dialog>
+
+    <script src="../shared/game.js"></script>
+</body>
+</html>

@@ -36,6 +36,17 @@ Mobile and desktop friendly block breaker game.
 
 See [`app08/README.md`](app08/README.md) for controls and deployment notes.
 
+## app09 - Octa Othello
+
+Mobile and desktop friendly Othello variant played on an octagonal board with the four corners cut away.
+
+- Mobile URL: `https://shionosatoshi.github.io/claude03/app09/mobile/`
+- Desktop URL: `https://shionosatoshi.github.io/claude03/app09/desktop/`
+- Local mobile entry: [`app09/mobile/index.html`](app09/mobile/index.html)
+- Local desktop entry: [`app09/desktop/index.html`](app09/desktop/index.html)
+
+See [`app09/README.md`](app09/README.md) for rules and design notes.
+
 ## app02 - RPG風ToDoリスト 🎮
 
 ゲーム要素を取り入れたToDoリストアプリです。ToDoを完了してボスを倒そう！

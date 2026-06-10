@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#14231f">
+    <link rel="manifest" href="../shared/manifest.webmanifest">
+    <link rel="stylesheet" href="../../common/vercel-vars.css">
+    <link rel="stylesheet" href="../shared/styles.css">
+    <title>Octa Othello Desktop</title>
+</head>
+<body data-platform="desktop">
+    <main class="app-shell">
+        <aside class="info-panel" aria-label="ゲーム情報">
+            <p class="eyebrow">Shape Othello</p>
+            <h1>Octa Othello</h1>
+            <p class="intro">四隅を削った八角形の盤面で遊ぶオセロです。角の価値が分散し、従来の定石だけでは押し切れません。</p>
+            <section class="rules-card" aria-label="追加ルール">
+                <h2>追加ルール</h2>
+                <ul>
+                    <li>灰色の欠けマスには石を置けません。</li>
+                    <li>欠けマスや盤面外をまたいで石は反転しません。</li>
+                    <li>勝敗は有効マス上の石数で判定します。</li>
+                </ul>
+            </section>
+        </aside>
+
+        <section class="game-stage" aria-label="Octa Othello desktop game">
+            <div class="top-bar">
+                <div class="score-card black">
+                    <span>Black</span>
+                    <strong id="blackScore">2</strong>
+                </div>
+                <div class="turn-card">
+                    <span id="turnLabel">Black turn</span>
+                    <strong id="statusLabel">合法手を選んでください</strong>
+                </div>
+                <div class="score-card white">
+                    <span>White</span>
+                    <strong id="whiteScore">2</strong>
+                </div>
+            </div>
+
+            <div class="difficulty-panel" aria-label="CPU difficulty">
+                <span>CPU難易度</span>
+                <button id="mediumDifficultyBtn" type="button" class="is-active">中</button>
+                <button id="strongDifficultyBtn" type="button">強</button>
+            </div>
+
+            <div class="board-shell">
+                <div id="board" class="board" role="grid" aria-label="四隅欠け八角形オセロ盤"></div>
+            </div>
+
+            <div class="controls" aria-label="ゲーム操作">
+                <button id="cpuModeBtn" type="button" class="is-active">CPU戦</button>
+                <button id="twoPlayerBtn" type="button">2人対戦</button>
+                <button id="hintBtn" type="button" aria-pressed="true">候補ON</button>
+                <button id="rulesBtn" type="button">ルール</button>
+                <button id="resetBtn" type="button" class="primary-action">リセット</button>
+            </div>
+        </section>
+    </main>
+
+    <dialog id="rulesDialog" class="rules-dialog">
+        <h2>Octa Othello の遊び方</h2>
+        <p>基本は通常のオセロと同じです。自分の石で相手の石を縦・横・斜めに挟む場所へ置き、挟まれた石を反転します。</p>
+        <ul>
+            <li>灰色の欠けマスには置けません。</li>
+            <li>欠けマスや盤面外にぶつかった方向では反転できません。</li>
+            <li>置ける場所がない場合は自動でパスします。</li>
+            <li>両者が置けない、または有効マスが埋まると終了です。</li>
+        </ul>
+        <button id="closeRulesBtn" type="button" class="primary-action">閉じる</button>
+    </dialog>
+
+    <script src="../shared/game.js"></script>
+</body>
+</html>

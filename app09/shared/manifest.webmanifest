@@ -1,0 +1,10 @@
+{
+    "name": "Octa Othello",
+    "short_name": "Octa Othello",
+    "start_url": "../mobile/",
+    "display": "standalone",
+    "background_color": "#14231f",
+    "theme_color": "#14231f",
+    "description": "四隅を削った八角形盤面で遊ぶオセロゲーム",
+    "icons": []
+}
